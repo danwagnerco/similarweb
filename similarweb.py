@@ -1,3 +1,4 @@
+import re
 import json
 import requests
 
@@ -15,7 +16,6 @@ class SimilarwebTrafficClient(object):
         self.full_url = self.base_url % {"url": url} + visits_url
         response = requests.get(self.full_url)
 
-        # This is the old _parse_visits_response method
         dictionary = json.loads(response.text)
         keys = list(dictionary.keys())
         values = list(dictionary.values())
@@ -29,12 +29,11 @@ class SimilarwebTrafficClient(object):
 
         # Handle invalid API key
         elif "Error" in keys:
-            sub_dictionary = dictionary["Error"]
-            return {"Error": sub_dictionary["Message"]}
+            return self._handle_invalid_api_key(dictionary)
 
         # Handle bad url
         elif "Message" in keys and "Data Not Found" in values:
-            return {"Error": "Malformed or Unknown URL"}
+            return self._handle_bad_url()
 
         # Handle bad inputs
         elif "Message" in keys and "The request is invalid." in values:
@@ -45,3 +44,40 @@ class SimilarwebTrafficClient(object):
         # Handle any other weirdness that is returned
         else:
             return {"Error": "Unknown Error"}
+
+
+    def traffic(self, url):
+        traffic_url = ("traffic?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + traffic_url
+        response = requests.get(self.full_url)
+
+        dictionary = json.loads(response.text)
+        keys = list(dictionary.keys())
+        values = list(dictionary.values())
+
+        # Happy path
+        if "GlobalRank" in keys:
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_invalid_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return {"Error": "Unknown Error"}
+
+
+    @staticmethod
+    def _handle_invalid_api_key(dictionary):
+        sub_dictionary = dictionary["Error"]
+        return {"Error": sub_dictionary["Message"]}
+
+
+    @staticmethod
+    def _handle_bad_url():
+        return {"Error": "Malformed or Unknown URL"}
