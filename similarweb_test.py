@@ -766,3 +766,200 @@ def test_traffic_client_visit_duration_response_from_good_inputs():
                                        "11-2014", "12-2014", False)
 
         assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_completes_full_url():
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly&start=11-2014"
+                  "&end=12-2014&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        client.bounce_rate("example.com", "monthly",
+                           "11-2014", "12-2014", False)
+
+    assert client.full_url == target_url
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_invalid_api_key():
+    expected = {"Error": "user_key_invalid"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly"
+                  "&start=11-2014&end=12-2014"
+                  "&md=False&UserKey=invalid_key")
+    f = "test_fixtures/traffic_client_bounce_rate_invalid_user_key_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("invalid_key")
+        result = client.bounce_rate("example.com", "monthly",
+                                    "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_malformed_url():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "bad_url/v1/bouncerate?gr=monthly"
+                  "&start=11-2014&end=12-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_url_malformed_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("bad_url", "monthly",
+                                    "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_malformed_url_incl_http():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "http://example.com/v1/bouncerate?gr=monthly"
+                  "&start=11-2014&end=12-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_url_with_http_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("http://example.com", "monthly",
+                                    "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_bad_granularity():
+    expected = {"Error": "The field Gr is invalid."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=bad"
+                  "&start=11-2014&end=12-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_granularity_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("example.com", "bad",
+                                    "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_bad_start_date():
+    expected = {"Error": "The value '14-2014' is not valid for Start."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly"
+                  "&start=14-2014&end=12-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_start_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("example.com", "monthly",
+                                    "14-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_bad_end_date():
+    expected = {"Error": "The value '0-2014' is not valid for End."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly"
+                  "&start=11-2014&end=0-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_end_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("example.com", "monthly",
+                                    "11-2014", "0-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_out_of_order_dates():
+    expected = {"Error": "Date range is not valid"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly"
+                  "&start=12-2014&end=9-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_out_of_order_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("example.com", "monthly",
+                                    "12-2014", "9-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_bad_main_domain():
+    expected = {"Error": "The value 'other' is not valid for Md."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly"
+                  "&start=11-2014&end=12-2014"
+                  "&md=other&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_main_domain_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("example.com", "monthly",
+                                    "11-2014", "12-2014", "other")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_empty_response():
+    expected = {"Error": "Unknown Error"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly"
+                  "&start=11-2014&end=12-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_empty_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("example.com", "monthly",
+                                    "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_traffic_client_bounce_rate_response_from_good_inputs():
+    expected = {"2014-11-01": 0.21914567903351953,
+                "2014-12-01": 0.22588292927510623}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/bouncerate?gr=monthly"
+                  "&start=11-2014&end=12-2014"
+                  "&md=False&UserKey=test_key")
+    f = "test_fixtures/traffic_client_bounce_rate_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SimilarwebTrafficClient("test_key")
+        result = client.bounce_rate("example.com", "monthly",
+                                    "11-2014", "12-2014", False)
+
+        assert result == expected

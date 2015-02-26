@@ -62,6 +62,15 @@ class SimilarwebTrafficClient(object):
         return self._parse_response_from_web_traffic_apis(response)
 
 
+    def bounce_rate(self, url, gr, start, end, md=False):
+        visits_url = ("bouncerate?gr={0}&start={1}&end={2}"
+                      "&md={3}&UserKey={4}"
+                      ).format(gr, start, end, md, self.user_key)
+        self.full_url = self.base_url % {"url": url} + visits_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_web_traffic_apis(response)
+
+
     def _parse_response_from_web_traffic_apis(self, response):
         dictionary = json.loads(response.text)
         keys = list(dictionary.keys())
