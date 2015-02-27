@@ -9,15 +9,6 @@ class SimilarwebTrafficClient(object):
         self.full_url = ""
 
 
-    def visits(self, url, gr, start, end, md=False):
-        visits_url = ("visits?gr={0}&start={1}&end={2}"
-                      "&md={3}&UserKey={4}"
-                      ).format(gr, start, end, md, self.user_key)
-        self.full_url = self.base_url % {"url": url} + visits_url
-        response = requests.get(self.full_url)
-        return self._parse_response_from_web_traffic_apis(response)
-
-
     def traffic(self, url):
         traffic_url = ("traffic?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + traffic_url
@@ -29,7 +20,29 @@ class SimilarwebTrafficClient(object):
 
         # Happy path
         if "GlobalRank" in keys:
+            top_country_shares = dictionary["TopCountryShares"]
+            codes = [str(d["CountryCode"]) for d in top_country_shares]
+            shares = [d["TrafficShare"] for d in top_country_shares]
+            top_country_shares_dictionary = dict(zip(codes, shares))
+            del dictionary["TopCountryShares"]
+            dictionary["TopCountryShares"] = top_country_shares_dictionary
+
+            traffic_reach = dictionary["TrafficReach"]
+            dates = [d["Date"] for d in traffic_reach]
+            values = [d["Value"] for d in traffic_reach]
+            traffic_reach_dictionary = dict(zip(dates, values))
+            del dictionary["TrafficReach"]
+            dictionary["TrafficReach"] = traffic_reach_dictionary
+
+            traffic_shares = dictionary["TrafficShares"]
+            sources = [d["SourceType"] for d in traffic_shares]
+            source_values = [d["SourceValue"] for d in traffic_shares]
+            traffic_shares_dictionary = dict(zip(sources, source_values))
+            del dictionary["TrafficShares"]
+            dictionary["TrafficShares"] = traffic_shares_dictionary
+
             return dictionary
+
 
         # Handle invalid API key
         elif "Error" in keys:
@@ -42,6 +55,15 @@ class SimilarwebTrafficClient(object):
         # Handle any other weirdness that is returned
         else:
             return self._handle_all_other_errors()
+
+
+    def visits(self, url, gr, start, end, md=False):
+        visits_url = ("visits?gr={0}&start={1}&end={2}"
+                      "&md={3}&UserKey={4}"
+                      ).format(gr, start, end, md, self.user_key)
+        self.full_url = self.base_url % {"url": url} + visits_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_web_traffic_apis(response)
 
 
     def pageviews(self, url, gr, start, end, md=False):

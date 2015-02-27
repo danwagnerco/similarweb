@@ -296,72 +296,24 @@ def test_traffic_client_traffic_from_good_inputs():
     expected = {"GlobalRank": 2,
                 "CountryCode": 840,
                 "CountryRank": 1,
-                "TopCountryShares": [
-                 {
-                 "CountryCode": 840,
-                 "TrafficShare": 0.4191358779109708
-                 },
-                 {
-                  "CountryCode": 356,
-                  "TrafficShare": 0.04602783067100975
-                 },
-                 {
-                  "CountryCode": 876,
-                  "TrafficShare": 6.869084578359956e-7
-                 },
-                 {
-                  "CountryCode": 10,
-                  "TrafficShare": 0
-                 }
-                ],
-                "TrafficReach": [
-                 {
-                  "Date": "02/01/2015",
-                  "Value": 0.16306846864268815
-                 },
-                 {
-                  "Date": "09/01/2015",
-                  "Value": 0.16501993162160358
-                 },
-                 {
-                  "Date": "16/01/2015",
-                  "Value": 0.1655193577048118
-                 },
-                 {
-                  "Date": "23/01/2015",
-                  "Value": 0.1665235785224394
-                 },
-                 {
-                  "Date": "30/01/2015",
-                  "Value": 0.16295290825680991
-                 }
-                ],
-                "TrafficShares": [
-                 {
-                  "SourceType": "Search",
-                  "SourceValue": 0.10429090056545187
-                 },
-                 {
-                  "SourceType": "Social",
-                  "SourceValue": 0.030245335003191837
-                 },
-                 {
-                  "SourceType": "Mail",
-                  "SourceValue": 0.0041178890588041694
-                 },
-                 {
-                  "SourceType": "Paid Referrals",
-                  "SourceValue": 0.0015840071128134063
-                 },
-                 {
-                  "SourceType": "Direct",
-                  "SourceValue": 0.6771397777323854
-                 },
-                 {
-                  "SourceType": "Referrals",
-                  "SourceValue": 0.1826220905273533
-                 }
-                ],
+                "TopCountryShares": {
+                    "840": 0.4191358779109708,
+                    "356": 0.04602783067100975,
+                    "876": 6.869084578359956e-7,
+                    "10": 0},
+                "TrafficReach": {
+                    "02/01/2015": 0.16306846864268815,
+                    "09/01/2015": 0.16501993162160358,
+                    "16/01/2015": 0.1655193577048118,
+                    "23/01/2015": 0.1665235785224394,
+                    "30/01/2015": 0.16295290825680991},
+                "TrafficShares": {
+                    "Search": 0.10429090056545187,
+                    "Social": 0.030245335003191837,
+                    "Mail": 0.0041178890588041694,
+                    "Paid Referrals": 0.0015840071128134063,
+                    "Direct": 0.6771397777323854,
+                    "Referrals": 0.1826220905273533},
                 "Date": "01/2015"}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/traffic?UserKey=test_key")
