@@ -1,0 +1,8 @@
+{
+ "Message": "The request is invalid.",
+ "ModelState": {
+   "Gr": [
+   "The field Gr is invalid."
+  ]
+ }
+}
