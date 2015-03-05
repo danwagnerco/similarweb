@@ -170,7 +170,17 @@ class ContentClient(object):
         similar_sites_url = ("similarsites?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + similar_sites_url
         response = requests.get(self.full_url)
+        return self._parse_response_from_content_apis(response, "SimilarSites")
 
+
+    def also_visited(self, url):
+        also_visited_url = ("alsovisited?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + also_visited_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_content_apis(response, "AlsoVisited")
+
+
+    def _parse_response_from_content_apis(self, response, happy_key):
         # Look out, the nastiest urls do not return JSON
         try:
             dictionary = json.loads(response.text)
@@ -180,8 +190,8 @@ class ContentClient(object):
             return self._handle_bad_url()
 
         # Handle good response (happy path)
-        if "SimilarSites" in keys:
-            sub_dictionary = dictionary["SimilarSites"]
+        if str(happy_key) in keys:
+            sub_dictionary = dictionary[str(happy_key)]
             urls = [x["Url"] for x in sub_dictionary]
             scores = [x["Score"] for x in sub_dictionary]
             return dict(zip(urls, scores))
