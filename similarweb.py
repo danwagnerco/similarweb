@@ -170,28 +170,38 @@ class ContentClient(object):
         similar_sites_url = ("similarsites?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + similar_sites_url
         response = requests.get(self.full_url)
-        return self._parse_response_from_content_apis(response, "SimilarSites", "Url", "Score")
+        return self._parse_non_category_response_from_content_apis(response, "SimilarSites", "Url", "Score")
 
 
     def also_visited(self, url):
         also_visited_url = ("alsovisited?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + also_visited_url
         response = requests.get(self.full_url)
-        return self._parse_response_from_content_apis(response, "AlsoVisited", "Url", "Score")
+        return self._parse_non_category_response_from_content_apis(response, "AlsoVisited", "Url", "Score")
 
 
     def tags(self, url):
         tags_url = ("tags?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + tags_url
         response = requests.get(self.full_url)
-        return self._parse_response_from_content_apis(response, "Tags", "Name", "Score")
+        return self._parse_non_category_response_from_content_apis(response, "Tags", "Name", "Score")
 
 
     def category(self, url):
         category_url = ("category?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + category_url
         response = requests.get(self.full_url)
+        return self._parse_category_response_from_content_apis(response)
 
+
+    def category_rank(self, url):
+        category_rank_url = ("categoryrank?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + category_rank_url
+        response = requests.get(self.full_url)
+        return self._parse_category_response_from_content_apis(response)
+
+
+    def _parse_category_response_from_content_apis(self, response):
         # Look out, the nastiest urls do not return JSON
         try:
             dictionary = json.loads(response.text)
@@ -215,7 +225,7 @@ class ContentClient(object):
             return self._handle_all_other_errors()
 
 
-    def _parse_response_from_content_apis(self, response, happy_key, item_key, item_value):
+    def _parse_non_category_response_from_content_apis(self, response, happy_key, item_key, item_value):
         # Look out, the nastiest urls do not return JSON
         try:
             dictionary = json.loads(response.text)
