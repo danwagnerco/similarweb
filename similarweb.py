@@ -67,28 +67,28 @@ class SimilarwebTrafficClient(object):
 
 
     def pageviews(self, url, gr, start, end, md=False):
-        visits_url = ("pageviews?gr={0}&start={1}&end={2}"
-                      "&md={3}&UserKey={4}"
-                      ).format(gr, start, end, md, self.user_key)
-        self.full_url = self.base_url % {"url": url} + visits_url
+        pageviews_url = ("pageviews?gr={0}&start={1}&end={2}"
+                         "&md={3}&UserKey={4}"
+                        ).format(gr, start, end, md, self.user_key)
+        self.full_url = self.base_url % {"url": url} + pageviews_url
         response = requests.get(self.full_url)
         return self._parse_response_from_web_traffic_apis(response)
 
 
     def visit_duration(self, url, gr, start, end, md=False):
-        visits_url = ("visitduration?gr={0}&start={1}&end={2}"
-                      "&md={3}&UserKey={4}"
-                      ).format(gr, start, end, md, self.user_key)
-        self.full_url = self.base_url % {"url": url} + visits_url
+        visit_duration_url = ("visitduration?gr={0}&start={1}&end={2}"
+                              "&md={3}&UserKey={4}"
+                             ).format(gr, start, end, md, self.user_key)
+        self.full_url = self.base_url % {"url": url} + visit_duration_url
         response = requests.get(self.full_url)
         return self._parse_response_from_web_traffic_apis(response)
 
 
     def bounce_rate(self, url, gr, start, end, md=False):
-        visits_url = ("bouncerate?gr={0}&start={1}&end={2}"
-                      "&md={3}&UserKey={4}"
-                      ).format(gr, start, end, md, self.user_key)
-        self.full_url = self.base_url % {"url": url} + visits_url
+        bounce_rate_url = ("bouncerate?gr={0}&start={1}&end={2}"
+                           "&md={3}&UserKey={4}"
+                          ).format(gr, start, end, md, self.user_key)
+        self.full_url = self.base_url % {"url": url} + bounce_rate_url
         response = requests.get(self.full_url)
         return self._parse_response_from_web_traffic_apis(response)
 
@@ -157,3 +157,116 @@ class SimilarwebTrafficClient(object):
     @staticmethod
     def _handle_all_other_errors():
         return {"Error": "Unknown Error"}
+
+
+class ContentClient(object):
+    def __init__(self, user_key):
+        self.user_key = user_key
+        self.base_url = "http://api.similarweb.com/Site/%(url)s/v2/"
+        self.full_url = ""
+
+
+    def similar_sites(self, url):
+        similar_sites_url = ("similarsites?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + similar_sites_url
+        response = requests.get(self.full_url)
+        return self._parse_non_category_response_from_content_apis(response, "SimilarSites", "Url", "Score")
+
+
+    def also_visited(self, url):
+        also_visited_url = ("alsovisited?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + also_visited_url
+        response = requests.get(self.full_url)
+        return self._parse_non_category_response_from_content_apis(response, "AlsoVisited", "Url", "Score")
+
+
+    def tags(self, url):
+        tags_url = ("tags?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + tags_url
+        response = requests.get(self.full_url)
+        return self._parse_non_category_response_from_content_apis(response, "Tags", "Name", "Score")
+
+
+    def category(self, url):
+        category_url = ("category?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + category_url
+        response = requests.get(self.full_url)
+        return self._parse_category_response_from_content_apis(response)
+
+
+    def category_rank(self, url):
+        category_rank_url = ("categoryrank?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + category_rank_url
+        response = requests.get(self.full_url)
+        return self._parse_category_response_from_content_apis(response)
+
+
+    def _parse_category_response_from_content_apis(self, response):
+        # Look out, the nastiest urls do not return JSON
+        try:
+            dictionary = json.loads(response.text)
+        except ValueError:
+            return self._handle_bad_url()
+
+        # Handle good response (happy path)
+        if "Category" in dictionary.keys():
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in dictionary.keys():
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in dictionary.keys() and "Data Not Found" in dictionary.values():
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
+    def _parse_non_category_response_from_content_apis(self, response, happy_key, item_key, item_value):
+        # Look out, the nastiest urls do not return JSON
+        try:
+            dictionary = json.loads(response.text)
+            keys = list(dictionary.keys())
+            values = list(dictionary.values())
+        except ValueError:
+            return self._handle_bad_url()
+
+        # Handle good response (happy path)
+        if str(happy_key) in keys:
+            sub_list = dictionary[str(happy_key)]
+            sub_keys = [x[item_key] for x in sub_list]
+            sub_values = [x[item_value] for x in sub_list]
+            return dict(zip(sub_keys, sub_values))
+
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and "Data Not Found" in values:
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
+    @staticmethod
+    def _handle_bad_api_key(dictionary):
+        sub_dictionary = dictionary["Error"]
+        return {"Error": sub_dictionary["Message"]}
+
+
+    @staticmethod
+    def _handle_bad_url():
+        return {"Error": "Malformed or Unknown URL"}
+
+
+    @staticmethod
+    def _handle_all_other_errors():
+        return {"Error": "Unknown Error"}
+

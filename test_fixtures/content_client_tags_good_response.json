@@ -1,0 +1,44 @@
+{
+ "Tags": [
+  {
+   "Name": "nba",
+   "Score": 0.6398514098507464
+  },
+  {
+   "Name": "sports",
+   "Score": 0.36910410054316395
+  },
+  {
+   "Name": "nba draft",
+   "Score": 0.3662137380042584
+  },
+  {
+   "Name": "basketball",
+   "Score": 0.30321123768053937
+  },
+  {
+   "Name": "professional sports",
+   "Score": 0.2537060998187944
+  },
+  {
+   "Name": "us sports",
+   "Score": 0.2537060998187944
+  },
+  {
+   "Name": "pro",
+   "Score": 0.1728851238680308
+  },
+  {
+   "Name": "sport",
+   "Score": 0.14998747927195202
+  },
+  {
+   "Name": "leagues",
+   "Score": 0.10235439910323241
+  },
+  {
+   "Name": "imported",
+   "Score": 0.09014857846589025
+  }
+ ]
+}

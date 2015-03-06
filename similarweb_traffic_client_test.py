@@ -1,4 +1,3 @@
-# TODO add a test that checks valid dates where start is after end
 import json
 import httpretty
 from similarweb import SimilarwebTrafficClient

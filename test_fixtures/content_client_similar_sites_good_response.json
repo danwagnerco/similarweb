@@ -1,0 +1,84 @@
+{
+ "SimilarSites": [
+  {
+   "Url": "nfl.com",
+   "Score": 0.9999999999999999
+  },
+  {
+   "Url": "espn.go.com",
+   "Score": 0.9999999999998606
+  },
+  {
+   "Url": "nhl.com",
+   "Score": 0.9999999878602834
+  },
+  {
+   "Url": "sportsillustrated.cnn.com",
+   "Score": 0.9999872885189645
+  },
+  {
+   "Url": "sports.yahoo.com",
+   "Score": 0.9999787609071635
+  },
+  {
+   "Url": "cbssports.com",
+   "Score": 0.9997651564945856
+  },
+  {
+   "Url": "golfweb.com",
+   "Score": 0.9994886009452536
+  },
+  {
+   "Url": "mlb.com",
+   "Score": 0.9987758980414373
+  },
+  {
+   "Url": "hoopshype.com",
+   "Score": 0.9892681920426786
+  },
+  {
+   "Url": "msn.foxsports.com",
+   "Score": 0.98444827064877
+  },
+  {
+   "Url": "insidehoops.com",
+   "Score": 0.9704204922805049
+  },
+  {
+   "Url": "mlb.mlb.com",
+   "Score": 0.9610661670727825
+  },
+  {
+   "Url": "sportingnews.com",
+   "Score": 0.9379576739746633
+  },
+  {
+   "Url": "nba-basketball.org",
+   "Score": 0.5895781619019344
+  },
+  {
+   "Url": "dimemag.com",
+   "Score": 0.5761373928338995
+  },
+  {
+   "Url": "sportsline.com",
+   "Score": 0.4785488863147692
+  },
+  {
+   "Url": "slamonline.com",
+   "Score": 0.37097801648129436
+  },
+  {
+   "Url": "realgm.com",
+   "Score": 0.3262779713759013
+  },
+  {
+   "Url": "basketball-reference.com",
+   "Score": 0.2913301249701222
+  },
+  {
+   "Url": "82games.com",
+   "Score": 0.28480732814372367
+  }
+ ]
+}
