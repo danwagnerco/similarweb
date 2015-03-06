@@ -331,3 +331,92 @@ def test_content_client_tags_response_from_good_inputs():
 
         assert result == expected
 
+
+@httpretty.activate
+def test_content_client_category_completes_full_url():
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/category?UserKey=test_key")
+    f = "test_fixtures/content_client_category_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        client.category("example.com")
+
+        assert client.full_url == target_url
+
+
+@httpretty.activate
+def test_content_client_category_response_from_invalid_api_key():
+    expected = {"Error": "user_key_invalid"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/category?UserKey=invalid_key")
+    f = "test_fixtures/content_client_category_invalid_api_key_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("invalid_key")
+        result = client.category("example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_content_client_category_response_from_malformed_url():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "bad_url/v2/category?UserKey=test_key")
+    f = "test_fixtures/content_client_category_url_malformed_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.category("bad_url")
+
+        assert result == expected
+
+
+# This response is not JSON-formatted
+@httpretty.activate
+def test_content_client_category_response_from_malformed_url_incl_http():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "http://example.com/v2/category?UserKey=test_key")
+    f = "test_fixtures/content_client_category_url_with_http_response.json"
+    with open(f) as data_file:
+        stringified = data_file.read().replace("\n", "")
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.category("http://example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_content_client_category_response_from_empty_response():
+    expected = {"Error": "Unknown Error"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/category?UserKey=test_key")
+    f = "test_fixtures/content_client_category_empty_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.category("example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_content_client_category_response_from_good_inputs():
+    expected = {"Category": "Sports/Basketball"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/category?UserKey=test_key")
+    f = "test_fixtures/content_client_category_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.category("example.com")
+
+        assert result == expected

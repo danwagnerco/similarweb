@@ -187,6 +187,34 @@ class ContentClient(object):
         return self._parse_response_from_content_apis(response, "Tags", "Name", "Score")
 
 
+    def category(self, url):
+        category_url = ("category?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + category_url
+        response = requests.get(self.full_url)
+
+        # Look out, the nastiest urls do not return JSON
+        try:
+            dictionary = json.loads(response.text)
+        except ValueError:
+            return self._handle_bad_url()
+
+        # Handle good response (happy path)
+        if "Category" in dictionary.keys():
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in dictionary.keys():
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in dictionary.keys() and "Data Not Found" in dictionary.values():
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
     def _parse_response_from_content_apis(self, response, happy_key, item_key, item_value):
         # Look out, the nastiest urls do not return JSON
         try:
