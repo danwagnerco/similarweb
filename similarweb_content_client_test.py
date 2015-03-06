@@ -97,7 +97,7 @@ def test_content_client_similar_sites_response_from_empty_response():
 
 
 @httpretty.activate
-def test_content_client_similar_sites_completes_full_url():
+def test_content_client_similar_sites_response_from_good_inputs():
     expected = {"nfl.com": 0.9999999999999999,
                 "espn.go.com": 0.9999999999998606,
                 "nhl.com": 0.9999999878602834,
@@ -206,7 +206,7 @@ def test_content_client_also_visited_response_from_empty_response():
 
 
 @httpretty.activate
-def test_content_client_also_visited_completes_full_url():
+def test_content_client_also_visited_response_from_good_inputs():
     expected = {"basketball.fantasysports.yahoo.com": 0.0044233824462893015,
                 "bleacherreport.com": 0.0040226422900098285,
                 "nfl.com": 0.003225871488152607,
@@ -229,6 +229,105 @@ def test_content_client_also_visited_completes_full_url():
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = ContentClient("test_key")
         result = client.also_visited("example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_content_client_tags_completes_full_url():
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/tags?UserKey=test_key")
+    f = "test_fixtures/content_client_tags_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        client.tags("example.com")
+
+        assert client.full_url == target_url
+
+
+@httpretty.activate
+def test_content_client_tags_response_from_invalid_api_key():
+    expected = {"Error": "user_key_invalid"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/tags?UserKey=invalid_key")
+    f = "test_fixtures/content_client_tags_invalid_api_key_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("invalid_key")
+        result = client.tags("example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_content_client_tags_response_from_malformed_url():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "bad_url/v2/tags?UserKey=test_key")
+    f = "test_fixtures/content_client_tags_url_malformed_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.tags("bad_url")
+
+        assert result == expected
+
+
+# This response is not JSON-formatted
+@httpretty.activate
+def test_content_client_tags_response_from_malformed_url_incl_http():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "http://example.com/v2/tags?UserKey=test_key")
+    f = "test_fixtures/content_client_tags_url_with_http_response.json"
+    with open(f) as data_file:
+        stringified = data_file.read().replace("\n", "")
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.tags("http://example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_content_client_tags_response_from_empty_response():
+    expected = {"Error": "Unknown Error"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/tags?UserKey=test_key")
+    f = "test_fixtures/content_client_tags_empty_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.tags("example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_content_client_tags_response_from_good_inputs():
+    expected = {"nba": 0.6398514098507464,
+                "sports": 0.36910410054316395,
+                "nba draft": 0.3662137380042584,
+                "basketball": 0.30321123768053937,
+                "professional sports": 0.2537060998187944,
+                "us sports": 0.2537060998187944,
+                "pro": 0.1728851238680308,
+                "sport": 0.14998747927195202,
+                "leagues": 0.10235439910323241,
+                "imported": 0.09014857846589025}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/tags?UserKey=test_key")
+    f = "test_fixtures/content_client_tags_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = ContentClient("test_key")
+        result = client.tags("example.com")
 
         assert result == expected
 

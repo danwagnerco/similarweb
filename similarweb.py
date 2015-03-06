@@ -170,17 +170,24 @@ class ContentClient(object):
         similar_sites_url = ("similarsites?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + similar_sites_url
         response = requests.get(self.full_url)
-        return self._parse_response_from_content_apis(response, "SimilarSites")
+        return self._parse_response_from_content_apis(response, "SimilarSites", "Url", "Score")
 
 
     def also_visited(self, url):
         also_visited_url = ("alsovisited?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url} + also_visited_url
         response = requests.get(self.full_url)
-        return self._parse_response_from_content_apis(response, "AlsoVisited")
+        return self._parse_response_from_content_apis(response, "AlsoVisited", "Url", "Score")
 
 
-    def _parse_response_from_content_apis(self, response, happy_key):
+    def tags(self, url):
+        tags_url = ("tags?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url} + tags_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_content_apis(response, "Tags", "Name", "Score")
+
+
+    def _parse_response_from_content_apis(self, response, happy_key, item_key, item_value):
         # Look out, the nastiest urls do not return JSON
         try:
             dictionary = json.loads(response.text)
@@ -191,10 +198,11 @@ class ContentClient(object):
 
         # Handle good response (happy path)
         if str(happy_key) in keys:
-            sub_dictionary = dictionary[str(happy_key)]
-            urls = [x["Url"] for x in sub_dictionary]
-            scores = [x["Score"] for x in sub_dictionary]
-            return dict(zip(urls, scores))
+            sub_list = dictionary[str(happy_key)]
+            sub_keys = [x[item_key] for x in sub_list]
+            sub_values = [x[item_value] for x in sub_list]
+            return dict(zip(sub_keys, sub_values))
+
 
         # Handle invalid API key
         elif "Error" in keys:
