@@ -498,7 +498,7 @@ def test_content_client_category_rank_response_from_empty_response():
 
 
 @httpretty.activate
-def test_content_client_category_response_from_good_inputs():
+def test_content_client_category_rank_response_from_good_inputs():
     expected = {"Category": "Sports/Basketball",
                 "CategoryRank": 1}
     target_url = ("http://api.similarweb.com/Site/"
