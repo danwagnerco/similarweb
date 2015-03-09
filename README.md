@@ -6,35 +6,35 @@ Python wrapper for the [SimilarWeb API](https://developer.similarweb.com/doc).
 Create a client object for the API you'd like to use:
 
 #### Ready to go
-* Traffic: `traffic_client = SimilarwebTrafficClient("your_api_key")`
+* Traffic: `traffic_client = TrafficClient("your_api_key")`
 * Content: `content_client = ContentClient("your_api_key")`
 
 #### In development
-* Mobile: `mobile_client = SimilarwebMobileClient("your_api_key")`
-* Sources: `sources_client = SimilarwebSourcesClient("your_api_key")`
+* Mobile: `mobile_client = MobileClient("your_api_key")`
+* Sources: `sources_client = SourcesClient("your_api_key")`
 
 ## Traffic Client in Action
 
-Let's set up the traffic object and some variables we'll be using throughout:
+Let's set up the traffic client object and some variables we'll be using throughout:
 
 ```python
->>> from similarweb import SimilarwebTrafficClient
->>> traffic_client = SimilarwebTraffiClient("my_api_key")
->>> url = "example.com"     # <~ no "www" or "http://"
+>>> from similarweb import TrafficClient
+>>> traffic_client = TraffiClient("my_api_key")
+>>> url = "example.com"     # <~ no "www." or "http://"
 >>> gr = "monthly"          # <~ or "weekly" or "daily"
 >>> start_month = "11-2014" # <~ M-YYYY
 >>> end_month = "12-2014"   # <~ M-YYYY
 >>> md = False              # or True if you want main domain ONLY
 ```
 
-##### Get the number of estimated visits for the requested domain on a monthly, weekly or daily basis:
+Get the number of estimated visits for the requested domain with `.visits`:
 
 ```python
 >>> traffic_client.visits(url, gr, start_month, end_month, md)
-{"2014-11-01": 12897241, "2014-12-01": 13917811}
+{"2014-11-01": 123456789, "2014-12-01": 123456788}
 ```
 
-##### Get the global rank, country rank and traffic geography, traffic reach and traffic sources distribution:
+Get the global rank, country rank, traffic geography, traffic reach and traffic sources distribution with `.traffic`:
 
 ```python
 >>> traffic_client.traffic(url)
@@ -50,11 +50,11 @@ Let's set up the traffic object and some variables we'll be using throughout:
   "10": 0
  },
  "TrafficReach": {
-  "01/08/2014": 0.1734,
-  "08/08/2014": 0.1649,
+  "01/08/2014": 0.1234,
+  "08/08/2014": 0.1233,
   # ... many more date-reach pairs
-  "23/01/2015": 0.1631,
-  "30/01/2015": 0.1681
+  "23/01/2015": 0.1232,
+  "30/01/2015": 0.1231
  },
  "TrafficShares": {
   "Search": 0.1043,
@@ -68,30 +68,30 @@ Let's set up the traffic object and some variables we'll be using throughout:
 }
 ```
 
-##### Get the average pageviews for the requested domain on a monthly, weekly or daily basis:
+Get the average pageviews for the requested domains with `.page_views`:
 
 ```python
->>> traffic_client.pageviews(url, gr, start_month, end_month, md)
-{"2014-11-01": 14.7224, "2014-12-01": 14.2360}
+>>> traffic_client.page_views(url, gr, start_month, end_month, md)
+{"2014-11-01": 14.1234, "2014-12-01": 14.1233}
 ```
 
-##### Get the average visit duration at the requested domain on a monthly, weekly or daily basis:
+Get the average visit duration at the requested domain with `.visit_duration`:
 
 ```python
 >>> traffic_client.visit_duration(url, gr, start_month, end_month, md)
-{"2014-11-01": 971.0572, "2014-12-01": 961.5565}
+{"2014-11-01": 987.654321, "2014-12-01": 987.654320}
 ```
 
-##### Get the average bounce rate at the requested domain on a monthly, weekly or daily basis:
+Get the average bounce rate for the requested domain with `.bounce_rate`:
 
 ```python
 >>> traffic_client.bounce_rate(url, gr, start_month, end_month, md)
-{"2014-11-01": 0.2191, "2014-12-01": 0.2259}
+{"2014-11-01": 0.1234, "2014-12-01": 0.1233}
 ```
 
 ## Content Client in Action
 
-Let's set up the content object and some variables we'll be using throughout:
+Let's set up the content client object and some variables we'll be using throughout:
 
 ```python
 >>> from similarweb import ContentClient
@@ -99,7 +99,7 @@ Let's set up the content object and some variables we'll be using throughout:
 >>> url = "example.com"     # <~ no "www" or "http://"
 ```
 
-##### Get sites similar to the requested domain along with similarity scores:
+Get sites similar to the requested domain along with similarity scores:
 
 ```python
 >>> content_client.similar_sites(url)
@@ -109,7 +109,7 @@ Let's set up the content object and some variables we'll be using throughout:
  "exampleN.com": 0.2109876543}
 ```
 
-##### Get sites and their affinity score frequently visited by users of the requested domain:
+Get sites and their affinity score frequently visited by users of the requested domain:
 
 ```python
 >>> content_client.also_visited(url)
@@ -119,7 +119,7 @@ Let's set up the content object and some variables we'll be using throughout:
  "exampleN.com": 0.00001234}
 ```
 
-##### Get tags and their score for the requested domain:
+Get tags and their score for the requested domain:
 
 ```python
 >>> content_client.tags(url)
@@ -129,14 +129,14 @@ Let's set up the content object and some variables we'll be using throughout:
  "dilly": 0.098765432}
 ```
 
-##### Get the category for the requested domain:
+Get the category for the requested domain:
 
 ```python
 >>> content_client.category(url)
 {"Category": "Shrimp/White Wine"}
 ```
 
-##### Get the category and rank for the requested domain:
+Get the category and rank for the requested domain:
 
 ```python
 >>> content_client.category_rank(url)

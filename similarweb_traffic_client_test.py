@@ -1,22 +1,22 @@
 import json
 import httpretty
-from similarweb import SimilarwebTrafficClient
+from similarweb import TrafficClient
 
 
 def test_traffic_client_has_user_key():
-    client = SimilarwebTrafficClient("test_key")
+    client = TrafficClient("test_key")
 
     assert client.user_key == "test_key"
 
 
 def test_traffic_client_has_base_url():
-    client = SimilarwebTrafficClient("test_key")
+    client = TrafficClient("test_key")
 
     assert client.base_url == "http://api.similarweb.com/Site/%(url)s/v1/"
 
 
 def test_traffic_client_has_empty_full_url():
-    client = SimilarwebTrafficClient("test_key")
+    client = TrafficClient("test_key")
 
     assert client.full_url == ""
 
@@ -30,7 +30,7 @@ def test_traffic_client_visits_completes_full_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         client.visits("example.com", "monthly", "11-2014", "12-2014", False)
 
     assert client.full_url == target_url
@@ -47,7 +47,7 @@ def test_traffic_client_visits_response_from_invalid_api_key():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("invalid_key")
+        client = TrafficClient("invalid_key")
         result = client.visits("example.com", "monthly",
                                "11-2014", "12-2014", False)
 
@@ -65,7 +65,7 @@ def test_traffic_client_visits_response_from_malformed_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("bad_url", "monthly",
                                "11-2014", "12-2014", False)
 
@@ -83,7 +83,7 @@ def test_traffic_client_visits_response_from_malformed_url_incl_http():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("http://example.com", "monthly",
                                "11-2014", "12-2014", False)
 
@@ -101,7 +101,7 @@ def test_traffic_client_visits_response_from_bad_granularity():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("example.com", "bad",
                                "11-2014", "12-2014", False)
 
@@ -119,7 +119,7 @@ def test_traffic_client_visits_response_from_bad_start_date():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("example.com", "monthly",
                                "14-2014", "12-2014", False)
 
@@ -137,7 +137,7 @@ def test_traffic_client_visits_response_from_bad_end_date():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("example.com", "monthly",
                                "11-2014", "0-2014", False)
 
@@ -155,7 +155,7 @@ def test_traffic_client_visits_response_from_out_of_order_dates():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("example.com", "monthly",
                                "12-2014", "9-2014", False)
 
@@ -173,7 +173,7 @@ def test_traffic_client_visits_response_from_bad_main_domain():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("example.com", "monthly",
                                "11-2014", "12-2014", "other")
 
@@ -191,7 +191,7 @@ def test_traffic_client_visits_response_from_empty_response():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("example.com", "monthly",
                                "11-2014", "12-2014", False)
 
@@ -209,7 +209,7 @@ def test_traffic_client_visits_response_from_good_inputs():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visits("example.com", "monthly",
                                "11-2014", "12-2014", False)
 
@@ -224,7 +224,7 @@ def test_traffic_client_traffic_completes_full_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         client.traffic("example.com")
 
     assert client.full_url == target_url
@@ -239,7 +239,7 @@ def test_traffic_client_traffic_response_from_invalid_api_key():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("invalid_key")
+        client = TrafficClient("invalid_key")
         result = client.traffic("example.com")
 
         assert result == expected
@@ -254,7 +254,7 @@ def test_traffic_client_traffic_response_from_bad_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.traffic("bad_url")
 
         assert result == expected
@@ -269,7 +269,7 @@ def test_traffic_client_traffic_response_from_bad_url_with_http():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.traffic("http://example.com")
 
         assert result == expected
@@ -284,7 +284,7 @@ def test_traffic_client_traffic_response_from_empty_response():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.traffic("example.com")
 
         assert result == expected
@@ -320,204 +320,204 @@ def test_traffic_client_traffic_from_good_inputs():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.traffic("example.com")
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_completes_full_url():
+def test_traffic_client_page_views_completes_full_url():
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly&start=11-2014"
                   "&end=12-2014&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_good_response.json"
+    f = "test_fixtures/traffic_client_page_views_good_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        client.pageviews("example.com", "monthly", "11-2014", "12-2014", False)
+        client = TrafficClient("test_key")
+        client.page_views("example.com", "monthly", "11-2014", "12-2014", False)
 
     assert client.full_url == target_url
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_invalid_api_key():
+def test_traffic_client_page_views_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=invalid_key")
-    f = "test_fixtures/traffic_client_pageviews_invalid_user_key_response.json"
+    f = "test_fixtures/traffic_client_page_views_invalid_user_key_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("invalid_key")
-        result = client.pageviews("example.com", "monthly",
-                                  "11-2014", "12-2014", False)
+        client = TrafficClient("invalid_key")
+        result = client.page_views("example.com", "monthly",
+                                   "11-2014", "12-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_malformed_url():
+def test_traffic_client_page_views_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
     target_url = ("http://api.similarweb.com/Site/"
                   "bad_url/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_url_malformed_response.json"
+    f = "test_fixtures/traffic_client_page_views_url_malformed_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("bad_url", "monthly",
-                                  "11-2014", "12-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("bad_url", "monthly",
+                                   "11-2014", "12-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_malformed_url_incl_http():
+def test_traffic_client_page_views_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
     target_url = ("http://api.similarweb.com/Site/"
                   "http://example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_url_with_http_response.json"
+    f = "test_fixtures/traffic_client_page_views_url_with_http_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("http://example.com", "monthly",
-                                  "11-2014", "12-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("http://example.com", "monthly",
+                                   "11-2014", "12-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_bad_granularity():
+def test_traffic_client_page_views_response_from_bad_granularity():
     expected = {"Error": "The field Gr is invalid."}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=bad"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_granularity_bad_response.json"
+    f = "test_fixtures/traffic_client_page_views_granularity_bad_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("example.com", "bad",
-                                  "11-2014", "12-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("example.com", "bad",
+                                   "11-2014", "12-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_bad_start_date():
+def test_traffic_client_page_views_response_from_bad_start_date():
     expected = {"Error": "The value '14-2014' is not valid for Start."}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=14-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_start_bad_response.json"
+    f = "test_fixtures/traffic_client_page_views_start_bad_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("example.com", "monthly",
-                                  "14-2014", "12-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("example.com", "monthly",
+                                   "14-2014", "12-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_bad_end_date():
+def test_traffic_client_page_views_response_from_bad_end_date():
     expected = {"Error": "The value '0-2014' is not valid for End."}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=0-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_end_bad_response.json"
+    f = "test_fixtures/traffic_client_page_views_end_bad_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("example.com", "monthly",
-                                  "11-2014", "0-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("example.com", "monthly",
+                                   "11-2014", "0-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_out_of_order_dates():
+def test_traffic_client_page_views_response_from_out_of_order_dates():
     expected = {"Error": "Date range is not valid"}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=12-2014&end=9-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_out_of_order_response.json"
+    f = "test_fixtures/traffic_client_page_views_out_of_order_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("example.com", "monthly",
-                                  "12-2014", "9-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("example.com", "monthly",
+                                   "12-2014", "9-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_bad_main_domain():
+def test_traffic_client_page_views_response_from_bad_main_domain():
     expected = {"Error": "The value 'other' is not valid for Md."}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=other&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_main_domain_bad_response.json"
+    f = "test_fixtures/traffic_client_page_views_main_domain_bad_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("example.com", "monthly",
-                                 "11-2014", "12-2014", "other")
+        client = TrafficClient("test_key")
+        result = client.page_views("example.com", "monthly",
+                                  "11-2014", "12-2014", "other")
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_empty_response():
+def test_traffic_client_page_views_response_from_empty_response():
     expected = {"Error": "Unknown Error"}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_empty_response.json"
+    f = "test_fixtures/traffic_client_page_views_empty_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("example.com", "monthly",
-                                  "11-2014", "12-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("example.com", "monthly",
+                                   "11-2014", "12-2014", False)
 
         assert result == expected
 
 
 @httpretty.activate
-def test_traffic_client_pageviews_response_from_good_inputs():
+def test_traffic_client_page_views_response_from_good_inputs():
     expected = {"2014-11-01": 14.722378910549942,
                 "2014-12-01": 14.23604875567647}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "test_fixtures/traffic_client_pageviews_good_response.json"
+    f = "test_fixtures/traffic_client_page_views_good_response.json"
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
-        result = client.pageviews("example.com", "monthly",
-                                  "11-2014", "12-2014", False)
+        client = TrafficClient("test_key")
+        result = client.page_views("example.com", "monthly",
+                                   "11-2014", "12-2014", False)
 
         assert result == expected
 
@@ -531,7 +531,7 @@ def test_traffic_client_visit_duration_completes_full_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         client.visit_duration("example.com", "monthly",
                               "11-2014", "12-2014", False)
 
@@ -549,7 +549,7 @@ def test_traffic_client_visit_duration_response_from_invalid_api_key():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("invalid_key")
+        client = TrafficClient("invalid_key")
         result = client.visit_duration("example.com", "monthly",
                                        "11-2014", "12-2014", False)
 
@@ -567,7 +567,7 @@ def test_traffic_client_visit_duration_response_from_malformed_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("bad_url", "monthly",
                                        "11-2014", "12-2014", False)
 
@@ -585,7 +585,7 @@ def test_traffic_client_visit_duration_response_from_malformed_url_incl_http():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("http://example.com", "monthly",
                                        "11-2014", "12-2014", False)
 
@@ -603,7 +603,7 @@ def test_traffic_client_visit_duration_response_from_bad_granularity():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("example.com", "bad",
                                        "11-2014", "12-2014", False)
 
@@ -621,7 +621,7 @@ def test_traffic_client_visit_duration_response_from_bad_start_date():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("example.com", "monthly",
                                        "14-2014", "12-2014", False)
 
@@ -639,7 +639,7 @@ def test_traffic_client_visit_duration_response_from_bad_end_date():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("example.com", "monthly",
                                        "11-2014", "0-2014", False)
 
@@ -657,7 +657,7 @@ def test_traffic_client_visit_duration_response_from_out_of_order_dates():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("example.com", "monthly",
                                        "12-2014", "9-2014", False)
 
@@ -675,7 +675,7 @@ def test_traffic_client_visit_duration_response_from_bad_main_domain():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("example.com", "monthly",
                                        "11-2014", "12-2014", "other")
 
@@ -693,7 +693,7 @@ def test_traffic_client_visit_duration_response_from_empty_response():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("example.com", "monthly",
                                        "11-2014", "12-2014", False)
 
@@ -712,7 +712,7 @@ def test_traffic_client_visit_duration_response_from_good_inputs():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.visit_duration("example.com", "monthly",
                                        "11-2014", "12-2014", False)
 
@@ -728,7 +728,7 @@ def test_traffic_client_bounce_rate_completes_full_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         client.bounce_rate("example.com", "monthly",
                            "11-2014", "12-2014", False)
 
@@ -746,7 +746,7 @@ def test_traffic_client_bounce_rate_response_from_invalid_api_key():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("invalid_key")
+        client = TrafficClient("invalid_key")
         result = client.bounce_rate("example.com", "monthly",
                                     "11-2014", "12-2014", False)
 
@@ -764,7 +764,7 @@ def test_traffic_client_bounce_rate_response_from_malformed_url():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("bad_url", "monthly",
                                     "11-2014", "12-2014", False)
 
@@ -782,7 +782,7 @@ def test_traffic_client_bounce_rate_response_from_malformed_url_incl_http():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("http://example.com", "monthly",
                                     "11-2014", "12-2014", False)
 
@@ -800,7 +800,7 @@ def test_traffic_client_bounce_rate_response_from_bad_granularity():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("example.com", "bad",
                                     "11-2014", "12-2014", False)
 
@@ -818,7 +818,7 @@ def test_traffic_client_bounce_rate_response_from_bad_start_date():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("example.com", "monthly",
                                     "14-2014", "12-2014", False)
 
@@ -836,7 +836,7 @@ def test_traffic_client_bounce_rate_response_from_bad_end_date():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("example.com", "monthly",
                                     "11-2014", "0-2014", False)
 
@@ -854,7 +854,7 @@ def test_traffic_client_bounce_rate_response_from_out_of_order_dates():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("example.com", "monthly",
                                     "12-2014", "9-2014", False)
 
@@ -872,7 +872,7 @@ def test_traffic_client_bounce_rate_response_from_bad_main_domain():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("example.com", "monthly",
                                     "11-2014", "12-2014", "other")
 
@@ -890,7 +890,7 @@ def test_traffic_client_bounce_rate_response_from_empty_response():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("example.com", "monthly",
                                     "11-2014", "12-2014", False)
 
@@ -909,7 +909,7 @@ def test_traffic_client_bounce_rate_response_from_good_inputs():
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
-        client = SimilarwebTrafficClient("test_key")
+        client = TrafficClient("test_key")
         result = client.bounce_rate("example.com", "monthly",
                                     "11-2014", "12-2014", False)
 

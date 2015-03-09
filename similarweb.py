@@ -2,7 +2,7 @@ import re
 import json
 import requests
 
-class SimilarwebTrafficClient(object):
+class TrafficClient(object):
     def __init__(self, user_key):
         self.user_key = user_key
         self.base_url = "http://api.similarweb.com/Site/%(url)s/v1/"
@@ -66,11 +66,11 @@ class SimilarwebTrafficClient(object):
         return self._parse_response_from_web_traffic_apis(response)
 
 
-    def pageviews(self, url, gr, start, end, md=False):
-        pageviews_url = ("pageviews?gr={0}&start={1}&end={2}"
+    def page_views(self, url, gr, start, end, md=False):
+        page_views_url = ("pageviews?gr={0}&start={1}&end={2}"
                          "&md={3}&UserKey={4}"
                         ).format(gr, start, end, md, self.user_key)
-        self.full_url = self.base_url % {"url": url} + pageviews_url
+        self.full_url = self.base_url % {"url": url} + page_views_url
         response = requests.get(self.full_url)
         return self._parse_response_from_web_traffic_apis(response)
 
