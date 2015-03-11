@@ -1,0 +1,26 @@
+{
+ "SocialSources": [
+  {
+   "Source": "Facebook",
+   "Value": 0.5872484011274256
+  },
+  {
+   "Source": "Reddit",
+   "Value": 0.1955231030114612
+  },
+  {
+   "Source": "Twitter",
+   "Value": 0.13209235484709875
+  },
+  {
+   "Source": "Youtube",
+   "Value": 0.06292737412742913
+  },
+  {
+   "Source": "Weibo.com",
+   "Value": 0.010782551614770926
+  }
+ ],
+ "StartDate": "12/2014",
+ "EndDate": "02/2015"
+}
