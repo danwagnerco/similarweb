@@ -270,3 +270,57 @@ class ContentClient(object):
     def _handle_all_other_errors():
         return {"Error": "Unknown Error"}
 
+
+class SourcesClient(object):
+    def __init__(self, user_key):
+        self.user_key = user_key
+        self.base_url = "http://api.similarweb.com/Site/%(url)s/%(version)s/"
+        self.full_url = ""
+
+
+    def social_referrals(self, url):
+        social_referrals_url = ("SocialReferringSites?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + social_referrals_url
+        response = requests.get(self.full_url)
+
+        dictionary = json.loads(response.text)
+        keys = list(dictionary.keys())
+        values = list(dictionary.values())
+
+        # Happy path
+        if "SocialSources" in keys:
+            social_sources_list = dictionary["SocialSources"]
+            sites = [d["Source"] for d in social_sources_list]
+            scores = [d["Value"] for d in social_sources_list]
+            social_sources_dictionary = dict(zip(sites, scores))
+            del dictionary["SocialSources"]
+            dictionary["SocialSources"] = social_sources_dictionary
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
+    @staticmethod
+    def _handle_bad_api_key(dictionary):
+        sub_dictionary = dictionary["Error"]
+        return {"Error": sub_dictionary["Message"]}
+
+
+    @staticmethod
+    def _handle_bad_url():
+        return {"Error": "Malformed or Unknown URL"}
+
+
+    @staticmethod
+    def _handle_all_other_errors():
+        return {"Error": "Unknown Error"}
