@@ -1,0 +1,57 @@
+{
+ "Data": [
+  {
+   "SearchTerm": "nba",
+   "Visits": 0.3112634279302496,
+   "Change": -0.1057165328807857
+  },
+  {
+   "SearchTerm": "nba league pass",
+   "Visits": 0.04344402567022226,
+   "Change": -0.28494011618310383
+  },
+  {
+   "SearchTerm": "nba standings",
+   "Visits": 0.026975361122759705,
+   "Change": 0.506606019589038
+  },
+  {
+   "SearchTerm": "nba.com",
+   "Visits": 0.024175302297685337,
+   "Change": -0.21470821673506887
+  },
+  {
+   "SearchTerm": "lakers",
+   "Visits": 0.020901069293644634,
+   "Change": -0.015496674800445101
+  },
+  {
+   "SearchTerm": "nba store",
+   "Visits": 0.009603534757614565,
+   "Change": 0.1954208822589453
+  },
+  {
+   "SearchTerm": "chicago bulls",
+   "Visits": 0.0093402142272212,
+   "Change": 0.09747235068892213
+  },
+  {
+   "SearchTerm": "raptors",
+   "Visits": 0.008992397410119684,
+   "Change": -0.32299852511496613
+  },
+  {
+   "SearchTerm": "cleveland cavaliers",
+   "Visits": 0.007440700569164507,
+   "Change": -0.13185965639266445
+  },
+  {
+   "SearchTerm": "nba game time",
+   "Visits": 0.007300049344512848,
+   "Change": -0.14326631607193804
+  }
+ ],
+ "ResultsCount": 10,
+ "TotalCount": 11975,
+ "Next": "http://api.similarweb.com/Site/nba.com/v1/orgsearch?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"
+}
