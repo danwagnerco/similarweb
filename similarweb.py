@@ -284,34 +284,16 @@ class SourcesClient(object):
                                       ).format(start, end, md, str(page), self.user_key)
         self.full_url = self.base_url % {"url": url, "version": "v1"} + organic_search_keywords_url
         response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
 
-        dictionary = json.loads(response.text)
-        keys = list(dictionary.keys())
-        values = list(dictionary.values())
 
-        # Happy path
-        if "Data" in keys:
-            return dictionary
-
-        # Handle invalid API key
-        elif "Error" in keys:
-            return self._handle_bad_api_key(dictionary)
-
-        # Handle bad url
-        elif "Message" in keys and "Data Not Found" in values:
-            return self._handle_bad_url()
-
-        # Handle out-of-order dates
-        elif "Message" in keys and "Date range is not valid" in values:
-            return self._handle_out_of_order_dates()
-
-        # Handle bad inputs
-        elif "Message" in keys and "The request is invalid." in values:
-            return self._handle_bad_inputs(dictionary)
-
-        # Handle any other weirdness that is returned
-        else:
-            return self._handle_all_other_errors()
+    def paid_search_keywords(self, url, page, start, end, md = False):
+        paid_search_keywords_url = ("paidsearch?start={0}&end={1}"
+                                    "&md={2}&page={3}&UserKey={4}"
+                                   ).format(start, end, md, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + paid_search_keywords_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
 
 
     def social_referrals(self, url):
@@ -340,6 +322,36 @@ class SourcesClient(object):
         # Handle bad url
         elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
             return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
+    def _parse_response_from_search_keywords_apis(self, response):
+        dictionary = json.loads(response.text)
+        keys = list(dictionary.keys())
+        values = list(dictionary.values())
+
+        # Happy path
+        if "Data" in keys:
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and "Data Not Found" in values:
+            return self._handle_bad_url()
+
+        # Handle out-of-order dates
+        elif "Message" in keys and "Date range is not valid" in values:
+            return self._handle_out_of_order_dates()
+
+        # Handle bad inputs
+        elif "Message" in keys and "The request is invalid." in values:
+            return self._handle_bad_inputs(dictionary)
 
         # Handle any other weirdness that is returned
         else:
