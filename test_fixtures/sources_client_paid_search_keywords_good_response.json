@@ -1,0 +1,57 @@
+{
+ "Data": [
+  {
+   "SearchTerm": "nba",
+   "Visits": 0.003344231214687972,
+   "Change": -0.062129215957638526
+  },
+  {
+   "SearchTerm": "nba store",
+   "Visits": 0.0029060240173658432,
+   "Change": 0.20846193245606223
+  },
+  {
+   "SearchTerm": "nba league pass",
+   "Visits": 0.0012716036162238515,
+   "Change": -0.7999901486315264
+  },
+  {
+   "SearchTerm": "nbastore",
+   "Visits": 0.0005023612587764184,
+   "Change": 0.9680003994439492
+  },
+  {
+   "SearchTerm": "portland trail blazers",
+   "Visits": 0.0005004670752349531,
+   "Change": 0.3499677164230108
+  },
+  {
+   "SearchTerm": "nba shop",
+   "Visits": 0.00045529952818624186,
+   "Change": 0.7850990143291091
+  },
+  {
+   "SearchTerm": "nba.com",
+   "Visits": 0.0003494276280350276,
+   "Change": -0.3860372438596248
+  },
+  {
+   "SearchTerm": "league pass",
+   "Visits": 0.00020733505676232166,
+   "Change": -0.8220804130834665
+  },
+  {
+   "SearchTerm": "nba ugly sweaters",
+   "Visits": 0.00019551746013417756,
+   "Change": 0.10131215601631173
+  },
+  {
+   "SearchTerm": "celtics schedule",
+   "Visits": 0.0001742655622935061,
+   "Change": 0.10131215601631166
+  }
+ ],
+ "ResultsCount": 10,
+ "TotalCount": 243,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/paidsearch?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"
+}
