@@ -440,3 +440,110 @@ def test_sources_client_paid_search_keywords_response_from_good_inputs():
 
         assert result == expected
 
+
+@httpretty.activate
+def test_sources_client_destinations_completes_full_url():
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/leadingdestinationsites?"
+                  "UserKey=test_key")
+    f = "test_fixtures/sources_client_destinations_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        client.destinations("example.com")
+
+        assert client.full_url == target_url
+
+
+@httpretty.activate
+def test_sources_client_destinations_response_from_invalid_api_key():
+    expected = {"Error": "user_key_invalid"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/leadingdestinationsites?"
+                  "UserKey=invalid_key")
+    f = "test_fixtures/sources_client_destinations_invalid_api_key_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("invalid_key")
+        result = client.destinations("example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_destinations_response_from_malformed_url():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "bad_url/v2/leadingdestinationsites?"
+                  "UserKey=test_key")
+    f = "test_fixtures/sources_client_destinations_url_malformed_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.destinations("bad_url")
+
+        assert result == expected
+
+
+# This response is not JSON-formatted
+@httpretty.activate
+def test_sources_client_destinations_response_from_malformed_url_incl_http():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "http://example.com/v2/leadingdestinationsites?"
+                  "UserKey=test_key")
+    f = "test_fixtures/sources_client_destinations_url_with_http_response.json"
+    with open(f) as data_file:
+        stringified = data_file.read().replace("\n", "")
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.destinations("http://example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_destinations_response_from_empty_response():
+    expected = {"Error": "Unknown Error"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/leadingdestinationsites?"
+                  "UserKey=test_key")
+    f = "test_fixtures/sources_client_destinations_empty_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.destinations("example.com")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_destinations_response_from_good_inputs():
+    expected = {"Sites": ["ticketmaster.com",
+                          "jmpdirect01.com",
+                          "youradexchange.com",
+                          "facebook.com",
+                          "youtube.com",
+                          "adcash.com",
+                          "i.cdn.turner.com",
+                          "oss.ticketmaster.com",
+                          "mavs.com",
+                          "spox.com"],
+                "StartDate": "12/2014",
+                "EndDate": "02/2015"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v2/leadingdestinationsites?"
+                  "UserKey=test_key")
+    f = "test_fixtures/sources_client_destinations_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.destinations("example.com")
+
+        assert result == expected
+

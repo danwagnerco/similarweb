@@ -328,6 +328,36 @@ class SourcesClient(object):
             return self._handle_all_other_errors()
 
 
+    def destinations(self, url):
+        destinations_url = ("leadingdestinationsites?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v2"} + destinations_url
+        response = requests.get(self.full_url)
+
+        # Look out, the nastiest urls do not return JSON
+        try:
+            dictionary = json.loads(response.text)
+            keys = list(dictionary.keys())
+            values = list(dictionary.values())
+        except ValueError:
+            return self._handle_bad_url()
+
+        # Happy path
+        if "Sites" in keys:
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
     def _parse_response_from_search_keywords_apis(self, response):
         dictionary = json.loads(response.text)
         keys = list(dictionary.keys())
