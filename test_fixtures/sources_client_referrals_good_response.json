@@ -1,0 +1,57 @@
+{
+ "Data": [
+  {
+   "Site": "bleacherreport.com",
+   "Visits": 0.13685091444901207,
+   "Change": -0.13783225525013185
+  },
+  {
+   "Site": "spox.com",
+   "Visits": 0.05541198081414703,
+   "Change": 0.09829387565169896
+  },
+  {
+   "Site": "sportal.com.au",
+   "Visits": 0.047765555793472955,
+   "Change": -0.10571922332026579
+  },
+  {
+   "Site": "espn.go.com",
+   "Visits": 0.034809331570584835,
+   "Change": 0.19681275612219412
+  },
+  {
+   "Site": "ajansspor.com",
+   "Visits": 0.033445473460156236,
+   "Change": 0.045225921939734626
+  },
+  {
+   "Site": "baloncesto.as.com",
+   "Visits": 0.0329538056630076,
+   "Change": 0.23717753959296534
+  },
+  {
+   "Site": "gazzetta.it",
+   "Visits": 0.032524041065096425,
+   "Change": 0.28017484722779185
+  },
+  {
+   "Site": "en.wikipedia.org",
+   "Visits": 0.028624177362280356,
+   "Change": 0.10503524254762013
+  },
+  {
+   "Site": "nba.sport24.gr",
+   "Visits": 0.02734001447504297,
+   "Change": -0.057600677746467314
+  },
+  {
+   "Site": "nba.co.jp",
+   "Visits": 0.02628877965004145,
+   "Change": -0.21513542547182316
+  }
+ ],
+ "ResultsCount": 10,
+ "TotalCount": 1540,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/referrals?start=11-2014&end=12-2014&UserKey=test_key&page=2"
+}
