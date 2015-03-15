@@ -296,6 +296,15 @@ class SourcesClient(object):
         return self._parse_response_from_search_keywords_apis(response)
 
 
+    def referrals(self, url, page, start, end):
+        referrals_url = ("referrals?start={0}&end={1}"
+                         "&page={2}&UserKey={3}"
+                        ).format(start, end, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + referrals_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
+
+
     def social_referrals(self, url):
         social_referrals_url = ("SocialReferringSites?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url % {"url": url, "version": "v1"} + social_referrals_url
