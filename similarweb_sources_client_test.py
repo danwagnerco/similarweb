@@ -251,6 +251,22 @@ def test_sources_client_organic_search_keywords_response_out_of_order_dates():
 
 
 @httpretty.activate
+def test_sources_client_organic_search_keywords_response_from_bad_main_domain():
+    expected = {"Error": "The value 'other' is not valid for Md."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgsearch?start=12-2014&"
+                  "end=9-2014&md=other&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_search_keywords_main_domain_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_search_keywords("example.com", 1, "11-2014", "12-2014", "other")
+
+        assert result == expected
+
+
+@httpretty.activate
 def test_sources_client_organic_search_keywords_response_empty_response():
     expected = {"Error": "Unknown Error"}
     target_url = ("http://api.similarweb.com/Site/"
@@ -405,6 +421,22 @@ def test_sources_client_paid_search_keywords_response_out_of_order_dates():
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
         result = client.paid_search_keywords("example.com", 1, "12-2014", "9-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_paid_search_keywords_response_from_bad_main_domain():
+    expected = {"Error": "The value 'other' is not valid for Md."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/paidsearch?start=12-2014&"
+                  "end=9-2014&md=other&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_paid_search_keywords_main_domain_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.paid_search_keywords("example.com", 1, "11-2014", "12-2014", "other")
 
         assert result == expected
 

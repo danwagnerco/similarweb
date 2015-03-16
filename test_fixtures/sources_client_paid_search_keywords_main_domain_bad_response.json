@@ -2,7 +2,7 @@
  "Message": "The request is invalid.",
  "ModelState": {
   "Md": [
-   "The value 'bad' is not valid for Md."
+   "The value 'other' is not valid for Md."
   ]
  }
 }
