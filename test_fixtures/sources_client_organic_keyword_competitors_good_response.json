@@ -1,0 +1,47 @@
+{
+ "Data": [
+  {
+   "Domain": "espn.go.com",
+   "Score": 0.029560747253298304
+  },
+  {
+   "Domain": "bleacherreport.com",
+   "Score": 0.018884794539523263
+  },
+  {
+   "Domain": "sports.yahoo.com",
+   "Score": 0.01660474680676441
+  },
+  {
+   "Domain": "probasketballtalk.nbcsports.com",
+   "Score": 0.011305560678493313
+  },
+  {
+   "Domain": "basketball-reference.com",
+   "Score": 0.01121870592591383
+  },
+  {
+   "Domain": "cbssports.com",
+   "Score": 0.010414195102828587
+  },
+  {
+   "Domain": "sports.sina.com.cn",
+   "Score": 0.009849368251728115
+  },
+  {
+   "Domain": "si.com",
+   "Score": 0.00836387054675375
+  },
+  {
+   "Domain": "thestar.com",
+   "Score": 0.008291876367334255
+  },
+  {
+   "Domain": "stubhub.com",
+   "Score": 0.007999157326624741
+  }
+ ],
+ "ResultsCount": 10,
+ "TotalCount": 1510,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/orgkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"
+}
