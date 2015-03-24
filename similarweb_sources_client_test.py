@@ -772,3 +772,191 @@ def test_sources_client_referrals_response_from_good_inputs():
 
         assert result == expected
 
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_completes_full_url():
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=11-2014&"
+                  "end=12-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        client.organic_keyword_competitors("example.com", 1, "11-2014", "12-2014", False)
+
+        assert client.full_url == target_url
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_invalid_api_key():
+    expected = {"Error": "user_key_invalid"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=11-2014&"
+                  "end=12-2014&md=False&page=1&UserKey=invalid_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_invalid_api_key_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("invalid_key")
+        result = client.organic_keyword_competitors("example.com", 1, "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_malformed_url():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "bad_url/v1/orgkwcompetitor?start=11-2014&"
+                  "end=12-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_url_malformed_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("bad_url", 1, "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_malformed_url_incl_http():
+    expected = {"Error": "Malformed or Unknown URL"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "http://example.com/v1/orgkwcompetitor?start=11-2014&"
+                  "end=12-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_url_with_http_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("http://example.com", 1, "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_bad_page():
+    expected = {"Error": "The field Page is invalid."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=11-2014&"
+                  "end=12-2014&md=False&page=0&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_page_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("example.com", 0, "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_bad_start_date():
+    expected = {"Error": "The value '14-2014' is not valid for Start."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=14-2014&"
+                  "end=12-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_start_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("example.com", 1, "14-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_bad_end_date():
+    expected = {"Error": "The value '0-2014' is not valid for End."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=11-2014&"
+                  "end=0-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_end_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("example.com", 1, "11-2014", "0-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_out_of_order_dates():
+    expected = {"Error": "Date range is not valid"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=12-2014&"
+                  "end=9-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_out_of_order_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("example.com", 1, "12-2014", "9-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_bad_main_domain():
+    expected = {"Error": "The value 'other' is not valid for Md."}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=12-2014&"
+                  "end=9-2014&md=other&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_main_domain_bad_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("example.com", 1, "11-2014", "12-2014", "other")
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_empty_response():
+    expected = {"Error": "Unknown Error"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=11-2014&"
+                  "end=12-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_empty_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("example.com", 1, "11-2014", "12-2014", False)
+
+        assert result == expected
+
+
+@httpretty.activate
+def test_sources_client_organic_keyword_competitors_response_from_good_inputs():
+    expected = {"Data": {"espn.go.com": 0.029560747253298304,
+                         "bleacherreport.com": 0.018884794539523263,
+                         "sports.yahoo.com": 0.01660474680676441,
+                         "probasketballtalk.nbcsports.com": 0.011305560678493313,
+                         "basketball-reference.com": 0.01121870592591383,
+                         "cbssports.com": 0.010414195102828587,
+                         "sports.sina.com.cn": 0.009849368251728115,
+                         "si.com": 0.00836387054675375,
+                         "thestar.com": 0.008291876367334255,
+                         "stubhub.com": 0.007999157326624741},
+                "ResultsCount": 10,
+                "TotalCount": 1510,
+                "Next": "http://api.similarweb.com/Site/example.com/v1/orgkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"}
+    target_url = ("http://api.similarweb.com/Site/"
+                  "example.com/v1/orgkwcompetitor?start=11-2014&"
+                  "end=12-2014&md=False&page=1&UserKey=test_key")
+    f = "test_fixtures/sources_client_organic_keyword_competitors_good_response.json"
+    with open(f) as data_file:
+        stringified = json.dumps(json.load(data_file))
+        expected = json.loads(stringified)
+        httpretty.register_uri(httpretty.GET, target_url, body=stringified)
+        client = SourcesClient("test_key")
+        result = client.organic_keyword_competitors("example.com", 1, "11-2014", "12-2014", False)
+
+        assert result == expected
+

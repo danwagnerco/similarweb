@@ -287,6 +287,15 @@ class SourcesClient(object):
         return self._parse_response_from_search_keywords_apis(response)
 
 
+    def organic_keyword_competitors(self, url, page, start, end, md = False):
+        organic_keyword_competitors_url = ("orgkwcompetitor?start={0}&end={1}"
+                                           "&md={2}&page={3}&UserKey={4}"
+                                          ).format(start, end, md, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + organic_keyword_competitors_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
+
+
     def paid_search_keywords(self, url, page, start, end, md = False):
         paid_search_keywords_url = ("paidsearch?start={0}&end={1}"
                                     "&md={2}&page={3}&UserKey={4}"
