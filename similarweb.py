@@ -57,16 +57,16 @@ class TrafficClient(object):
             return self._handle_all_other_errors()
 
 
-    def visits(self, url, gr, start, end, md=False):
+    def visits(self, url, gr, start, end, md = False):
         visits_url = ("visits?gr={0}&start={1}&end={2}"
                       "&md={3}&UserKey={4}"
-                      ).format(gr, start, end, md, self.user_key)
+                     ).format(gr, start, end, md, self.user_key)
         self.full_url = self.base_url % {"url": url} + visits_url
         response = requests.get(self.full_url)
         return self._parse_response_from_web_traffic_apis(response)
 
 
-    def page_views(self, url, gr, start, end, md=False):
+    def page_views(self, url, gr, start, end, md = False):
         page_views_url = ("pageviews?gr={0}&start={1}&end={2}"
                          "&md={3}&UserKey={4}"
                         ).format(gr, start, end, md, self.user_key)
@@ -75,7 +75,7 @@ class TrafficClient(object):
         return self._parse_response_from_web_traffic_apis(response)
 
 
-    def visit_duration(self, url, gr, start, end, md=False):
+    def visit_duration(self, url, gr, start, end, md = False):
         visit_duration_url = ("visitduration?gr={0}&start={1}&end={2}"
                               "&md={3}&UserKey={4}"
                              ).format(gr, start, end, md, self.user_key)
@@ -84,7 +84,7 @@ class TrafficClient(object):
         return self._parse_response_from_web_traffic_apis(response)
 
 
-    def bounce_rate(self, url, gr, start, end, md=False):
+    def bounce_rate(self, url, gr, start, end, md = False):
         bounce_rate_url = ("bouncerate?gr={0}&start={1}&end={2}"
                            "&md={3}&UserKey={4}"
                           ).format(gr, start, end, md, self.user_key)
@@ -269,4 +269,176 @@ class ContentClient(object):
     @staticmethod
     def _handle_all_other_errors():
         return {"Error": "Unknown Error"}
+
+
+class SourcesClient(object):
+    def __init__(self, user_key):
+        self.user_key = user_key
+        self.base_url = "http://api.similarweb.com/Site/%(url)s/%(version)s/"
+        self.full_url = ""
+
+
+    def organic_search_keywords(self, url, page, start, end, md = False):
+        organic_search_keywords_url = ("orgsearch?start={0}&end={1}"
+                                       "&md={2}&page={3}&UserKey={4}"
+                                      ).format(start, end, md, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + organic_search_keywords_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
+
+
+    def organic_keyword_competitors(self, url, page, start, end, md = False):
+        organic_keyword_competitors_url = ("orgkwcompetitor?start={0}&end={1}"
+                                           "&md={2}&page={3}&UserKey={4}"
+                                          ).format(start, end, md, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + organic_keyword_competitors_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
+
+
+    def paid_keyword_competitors(self, url, page, start, end, md = False):
+        paid_keyword_competitors_url = ("paidkwcompetitor?start={0}&end={1}"
+                                        "&md={2}&page={3}&UserKey={4}"
+                                       ).format(start, end, md, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + paid_keyword_competitors_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
+
+
+    def paid_search_keywords(self, url, page, start, end, md = False):
+        paid_search_keywords_url = ("paidsearch?start={0}&end={1}"
+                                    "&md={2}&page={3}&UserKey={4}"
+                                   ).format(start, end, md, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + paid_search_keywords_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
+
+
+    def referrals(self, url, page, start, end):
+        referrals_url = ("referrals?start={0}&end={1}"
+                         "&page={2}&UserKey={3}"
+                        ).format(start, end, str(page), self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + referrals_url
+        response = requests.get(self.full_url)
+        return self._parse_response_from_search_keywords_apis(response)
+
+
+    def social_referrals(self, url):
+        social_referrals_url = ("SocialReferringSites?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v1"} + social_referrals_url
+        response = requests.get(self.full_url)
+
+        dictionary = json.loads(response.text)
+        keys = list(dictionary.keys())
+        values = list(dictionary.values())
+
+        # Happy path
+        if "SocialSources" in keys:
+            social_sources_list = dictionary["SocialSources"]
+            sites = [d["Source"] for d in social_sources_list]
+            scores = [d["Value"] for d in social_sources_list]
+            social_sources_dictionary = dict(zip(sites, scores))
+            del dictionary["SocialSources"]
+            dictionary["SocialSources"] = social_sources_dictionary
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
+    def destinations(self, url):
+        destinations_url = ("leadingdestinationsites?UserKey={0}").format(self.user_key)
+        self.full_url = self.base_url % {"url": url, "version": "v2"} + destinations_url
+        response = requests.get(self.full_url)
+
+        # Look out, the nastiest urls do not return JSON
+        try:
+            dictionary = json.loads(response.text)
+            keys = list(dictionary.keys())
+            values = list(dictionary.values())
+        except ValueError:
+            return self._handle_bad_url()
+
+        # Happy path
+        if "Sites" in keys:
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+            return self._handle_bad_url()
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
+    def _parse_response_from_search_keywords_apis(self, response):
+        dictionary = json.loads(response.text)
+        keys = list(dictionary.keys())
+        values = list(dictionary.values())
+
+        # Happy path
+        if "Data" in keys:
+            return dictionary
+
+        # Handle invalid API key
+        elif "Error" in keys:
+            return self._handle_bad_api_key(dictionary)
+
+        # Handle bad url
+        elif "Message" in keys and "Data Not Found" in values:
+            return self._handle_bad_url()
+
+        # Handle out-of-order dates
+        elif "Message" in keys and "Date range is not valid" in values:
+            return self._handle_out_of_order_dates()
+
+        # Handle bad inputs
+        elif "Message" in keys and "The request is invalid." in values:
+            return self._handle_bad_inputs(dictionary)
+
+        # Handle any other weirdness that is returned
+        else:
+            return self._handle_all_other_errors()
+
+
+    @staticmethod
+    def _handle_bad_api_key(dictionary):
+        sub_dictionary = dictionary["Error"]
+        return {"Error": sub_dictionary["Message"]}
+
+
+    @staticmethod
+    def _handle_bad_url():
+        return {"Error": "Malformed or Unknown URL"}
+
+
+    @staticmethod
+    def _handle_all_other_errors():
+        return {"Error": "Unknown Error"}
+
+
+    @staticmethod
+    def _handle_bad_inputs(dictionary):
+        sub_dictionary = dictionary["ModelState"]
+        error_message = list(sub_dictionary.values())[0][0]
+        return {"Error": error_message}
+
+
+    @staticmethod
+    def _handle_out_of_order_dates():
+        return {"Error": "Date range is not valid"}
 

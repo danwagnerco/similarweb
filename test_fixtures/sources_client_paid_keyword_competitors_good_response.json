@@ -1,0 +1,47 @@
+{
+ "Data": [
+  {
+   "Domain": "lojanba.com",
+   "Score": 0.07917791674254333
+  },
+  {
+   "Domain": "ticketscenter.co",
+   "Score": 0.049233018800901834
+  },
+  {
+   "Domain": "fanatics.com",
+   "Score": 0.04447244942383259
+  },
+  {
+   "Domain": "eventticketscenter.com",
+   "Score": 0.039140080023049
+  },
+  {
+   "Domain": "fansedge.com",
+   "Score": 0.038988779340718
+  },
+  {
+   "Domain": "aceticket.com",
+   "Score": 0.03627101965540125
+  },
+  {
+   "Domain": "ticketmaster.com",
+   "Score": 0.02999530980384764
+  },
+  {
+   "Domain": "oldglory.com",
+   "Score": 0.020328655817132217
+  },
+  {
+   "Domain": "ticketnetwork.com",
+   "Score": 0.01767243856389301
+  },
+  {
+   "Domain": "vividseats.com",
+   "Score": 0.016849267072753825
+  }
+ ],
+ "ResultsCount": 10,
+ "TotalCount": 489,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/paidkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"
+}
