@@ -53,5 +53,5 @@
  ],
  "ResultsCount": 10,
  "TotalCount": 11975,
- "Next": "http://api.similarweb.com/Site/nba.com/v1/orgsearch?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"
+ "Next": "http://api.similarweb.com/Site/example.com/v1/orgsearch?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"
 }
