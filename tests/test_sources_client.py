@@ -12,7 +12,7 @@ def test_sources_client_has_user_key():
 def test_sources_client_has_base_url():
     client = SourcesClient("test_key")
 
-    assert client.base_url == "http://api.similarweb.com/Site/%(url)s/%(version)s/"
+    assert client.base_url == "http://api.similarweb.com/Site/{0}/{1}/"
 
 
 def test_sources_client_has_empty_full_url():

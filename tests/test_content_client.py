@@ -12,7 +12,7 @@ def test_content_client_has_user_key():
 def test_content_client_has_base_url():
     client = ContentClient("test_key")
 
-    assert client.base_url == "http://api.similarweb.com/Site/%(url)s/v2/"
+    assert client.base_url == "http://api.similarweb.com/Site/{0}/v2/"
 
 
 def test_content_client_has_empty_full_url():

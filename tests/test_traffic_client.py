@@ -12,7 +12,7 @@ def test_traffic_client_has_user_key():
 def test_traffic_client_has_base_url():
     client = TrafficClient("test_key")
 
-    assert client.base_url == "http://api.similarweb.com/Site/%(url)s/v1/"
+    assert client.base_url == "http://api.similarweb.com/Site/{0}/v1/"
 
 
 def test_traffic_client_has_empty_full_url():
