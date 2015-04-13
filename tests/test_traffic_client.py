@@ -1,7 +1,9 @@
 import json
 import httpretty
+import os
 from similarweb.similarweb import TrafficClient
 
+TD = os.path.dirname(os.path.realpath(__file__))
 
 def test_traffic_client_has_user_key():
     client = TrafficClient("test_key")
@@ -26,7 +28,7 @@ def test_traffic_client_visits_completes_full_url():
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/visits?gr=monthly&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_good_response.json"
+    f = "{0}/fixtures/traffic_client_visits_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -43,7 +45,7 @@ def test_traffic_client_visits_response_from_invalid_api_key():
                   "example.com/v1/visits?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=invalid_key")
-    f = "fixtures/traffic_client_visits_invalid_user_key_response.json"
+    f = "{0}/fixtures/traffic_client_visits_invalid_user_key_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -61,7 +63,7 @@ def test_traffic_client_visits_response_from_malformed_url():
                   "bad_url/v1/visits?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_url_malformed_response.json"
+    f = "{0}/fixtures/traffic_client_visits_url_malformed_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -79,7 +81,7 @@ def test_traffic_client_visits_response_from_malformed_url_incl_http():
                   "http://example.com/v1/visits?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_url_with_http_response.json"
+    f = "{0}/fixtures/traffic_client_visits_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -97,7 +99,7 @@ def test_traffic_client_visits_response_from_bad_granularity():
                   "example.com/v1/visits?gr=bad"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_granularity_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visits_granularity_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -115,7 +117,7 @@ def test_traffic_client_visits_response_from_bad_start_date():
                   "example.com/v1/visits?gr=monthly"
                   "&start=14-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_start_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visits_start_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -133,7 +135,7 @@ def test_traffic_client_visits_response_from_bad_end_date():
                   "example.com/v1/visits?gr=monthly"
                   "&start=11-2014&end=0-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_end_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visits_end_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -151,7 +153,7 @@ def test_traffic_client_visits_response_from_out_of_order_dates():
                   "example.com/v1/visits?gr=monthly"
                   "&start=12-2014&end=9-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_out_of_order_response.json"
+    f = "{0}/fixtures/traffic_client_visits_out_of_order_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -169,7 +171,7 @@ def test_traffic_client_visits_response_from_bad_main_domain():
                   "example.com/v1/visits?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=other&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_main_domain_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visits_main_domain_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -187,7 +189,7 @@ def test_traffic_client_visits_response_from_empty_response():
                   "example.com/v1/visits?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_empty_response.json"
+    f = "{0}/fixtures/traffic_client_visits_empty_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -205,7 +207,7 @@ def test_traffic_client_visits_response_from_good_inputs():
                   "example.com/v1/visits?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visits_good_response.json"
+    f = "{0}/fixtures/traffic_client_visits_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -220,7 +222,7 @@ def test_traffic_client_visits_response_from_good_inputs():
 def test_traffic_client_traffic_completes_full_url():
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/traffic?UserKey=test_key")
-    f = "fixtures/traffic_client_traffic_good_response.json"
+    f = "{0}/fixtures/traffic_client_traffic_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -235,7 +237,7 @@ def test_traffic_client_traffic_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/traffic?UserKey=invalid_key")
-    f = "fixtures/traffic_client_traffic_invalid_user_key_response.json"
+    f = "{0}/fixtures/traffic_client_traffic_invalid_user_key_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -250,7 +252,7 @@ def test_traffic_client_traffic_response_from_bad_url():
     expected = {"Error": "Malformed or Unknown URL"}
     target_url = ("http://api.similarweb.com/Site/"
                   "bad_url/v1/traffic?UserKey=test_key")
-    f = "fixtures/traffic_client_traffic_url_malformed_response.json"
+    f = "{0}/fixtures/traffic_client_traffic_url_malformed_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -265,7 +267,7 @@ def test_traffic_client_traffic_response_from_bad_url_with_http():
     expected = {"Error": "Malformed or Unknown URL"}
     target_url = ("http://api.similarweb.com/Site/"
                   "http:/example.com/v1/traffic?UserKey=test_key")
-    f = "fixtures/traffic_client_traffic_url_with_http_response.json"
+    f = "{0}/fixtures/traffic_client_traffic_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -280,7 +282,7 @@ def test_traffic_client_traffic_response_from_empty_response():
     expected = {"Error": "Unknown Error"}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/traffic?UserKey=test_key")
-    f = "fixtures/traffic_client_traffic_empty_response.json"
+    f = "{0}/fixtures/traffic_client_traffic_empty_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -316,7 +318,7 @@ def test_traffic_client_traffic_from_good_inputs():
                 "Date": "01/2015"}
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/traffic?UserKey=test_key")
-    f = "fixtures/traffic_client_traffic_good_response.json"
+    f = "{0}/fixtures/traffic_client_traffic_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -331,7 +333,7 @@ def test_traffic_client_page_views_completes_full_url():
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/pageviews?gr=monthly&start=11-2014"
                   "&end=12-2014&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_good_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -348,7 +350,7 @@ def test_traffic_client_page_views_response_from_invalid_api_key():
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=invalid_key")
-    f = "fixtures/traffic_client_page_views_invalid_user_key_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_invalid_user_key_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -366,7 +368,7 @@ def test_traffic_client_page_views_response_from_malformed_url():
                   "bad_url/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_url_malformed_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_url_malformed_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -384,7 +386,7 @@ def test_traffic_client_page_views_response_from_malformed_url_incl_http():
                   "http://example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_url_with_http_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -402,7 +404,7 @@ def test_traffic_client_page_views_response_from_bad_granularity():
                   "example.com/v1/pageviews?gr=bad"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_granularity_bad_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_granularity_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -420,7 +422,7 @@ def test_traffic_client_page_views_response_from_bad_start_date():
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=14-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_start_bad_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_start_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -438,7 +440,7 @@ def test_traffic_client_page_views_response_from_bad_end_date():
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=0-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_end_bad_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_end_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -456,7 +458,7 @@ def test_traffic_client_page_views_response_from_out_of_order_dates():
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=12-2014&end=9-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_out_of_order_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_out_of_order_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -474,7 +476,7 @@ def test_traffic_client_page_views_response_from_bad_main_domain():
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=other&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_main_domain_bad_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_main_domain_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -492,7 +494,7 @@ def test_traffic_client_page_views_response_from_empty_response():
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_empty_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_empty_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -511,7 +513,7 @@ def test_traffic_client_page_views_response_from_good_inputs():
                   "example.com/v1/pageviews?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_page_views_good_response.json"
+    f = "{0}/fixtures/traffic_client_page_views_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -527,7 +529,7 @@ def test_traffic_client_visit_duration_completes_full_url():
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/visitduration?gr=monthly&start=11-2014"
                   "&end=12-2014&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_good_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -545,7 +547,7 @@ def test_traffic_client_visit_duration_response_from_invalid_api_key():
                   "example.com/v1/visitduration?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=invalid_key")
-    f = "fixtures/traffic_client_visit_duration_invalid_user_key_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_invalid_user_key_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -563,7 +565,7 @@ def test_traffic_client_visit_duration_response_from_malformed_url():
                   "bad_url/v1/visitduration?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_url_malformed_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_url_malformed_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -581,7 +583,7 @@ def test_traffic_client_visit_duration_response_from_malformed_url_incl_http():
                   "http://example.com/v1/visitduration?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_url_with_http_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -599,7 +601,7 @@ def test_traffic_client_visit_duration_response_from_bad_granularity():
                   "example.com/v1/visitduration?gr=bad"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_granularity_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_granularity_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -617,7 +619,7 @@ def test_traffic_client_visit_duration_response_from_bad_start_date():
                   "example.com/v1/visitduration?gr=monthly"
                   "&start=14-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_start_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_start_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -635,7 +637,7 @@ def test_traffic_client_visit_duration_response_from_bad_end_date():
                   "example.com/v1/visitduration?gr=monthly"
                   "&start=11-2014&end=0-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_end_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_end_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -653,7 +655,7 @@ def test_traffic_client_visit_duration_response_from_out_of_order_dates():
                   "example.com/v1/visitduration?gr=monthly"
                   "&start=12-2014&end=9-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_out_of_order_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_out_of_order_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -671,7 +673,7 @@ def test_traffic_client_visit_duration_response_from_bad_main_domain():
                   "example.com/v1/visitduration?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=other&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_main_domain_bad_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_main_domain_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -689,7 +691,7 @@ def test_traffic_client_visit_duration_response_from_empty_response():
                   "example.com/v1/visitduration?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_empty_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_empty_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -708,7 +710,7 @@ def test_traffic_client_visit_duration_response_from_good_inputs():
                   "example.com/v1/visitduration?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_visit_duration_good_response.json"
+    f = "{0}/fixtures/traffic_client_visit_duration_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -724,7 +726,7 @@ def test_traffic_client_bounce_rate_completes_full_url():
     target_url = ("http://api.similarweb.com/Site/"
                   "example.com/v1/bouncerate?gr=monthly&start=11-2014"
                   "&end=12-2014&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_good_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -742,7 +744,7 @@ def test_traffic_client_bounce_rate_response_from_invalid_api_key():
                   "example.com/v1/bouncerate?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=invalid_key")
-    f = "fixtures/traffic_client_bounce_rate_invalid_user_key_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_invalid_user_key_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -760,7 +762,7 @@ def test_traffic_client_bounce_rate_response_from_malformed_url():
                   "bad_url/v1/bouncerate?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_url_malformed_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_url_malformed_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -778,7 +780,7 @@ def test_traffic_client_bounce_rate_response_from_malformed_url_incl_http():
                   "http://example.com/v1/bouncerate?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_url_with_http_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -796,7 +798,7 @@ def test_traffic_client_bounce_rate_response_from_bad_granularity():
                   "example.com/v1/bouncerate?gr=bad"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_granularity_bad_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_granularity_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -814,7 +816,7 @@ def test_traffic_client_bounce_rate_response_from_bad_start_date():
                   "example.com/v1/bouncerate?gr=monthly"
                   "&start=14-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_start_bad_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_start_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -832,7 +834,7 @@ def test_traffic_client_bounce_rate_response_from_bad_end_date():
                   "example.com/v1/bouncerate?gr=monthly"
                   "&start=11-2014&end=0-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_end_bad_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_end_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -850,7 +852,7 @@ def test_traffic_client_bounce_rate_response_from_out_of_order_dates():
                   "example.com/v1/bouncerate?gr=monthly"
                   "&start=12-2014&end=9-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_out_of_order_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_out_of_order_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -868,7 +870,7 @@ def test_traffic_client_bounce_rate_response_from_bad_main_domain():
                   "example.com/v1/bouncerate?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=other&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_main_domain_bad_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_main_domain_bad_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -886,7 +888,7 @@ def test_traffic_client_bounce_rate_response_from_empty_response():
                   "example.com/v1/bouncerate?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_empty_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_empty_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
@@ -905,7 +907,7 @@ def test_traffic_client_bounce_rate_response_from_good_inputs():
                   "example.com/v1/bouncerate?gr=monthly"
                   "&start=11-2014&end=12-2014"
                   "&md=False&UserKey=test_key")
-    f = "fixtures/traffic_client_bounce_rate_good_response.json"
+    f = "{0}/fixtures/traffic_client_bounce_rate_good_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)

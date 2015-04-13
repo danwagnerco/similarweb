@@ -143,3 +143,127 @@ Get the category and rank for the requested domain:
 {"Category": "Shrimp/White Wine",
  "CategoryRank": 1}
 ```
+
+## Sources Client in Action
+
+Let's set up the sources client object and some variables we'll be using throughout:
+
+```
+>>> from similarweb import SourcesClient
+>>> sources_client = SourcesClient("my_api_key")
+>>> url = "example.com"     # <~ no "www." or "http://"
+>>> page = 1                # <~ increase to 2, 3, 4... for more results
+>>> gr = "monthly"          # <~ or "weekly" or "daily"
+>>> start_month = "11-2014" # <~ M-YYYY
+>>> end_month = "12-2014"   # <~ M-YYYY
+>>> md = False              # or True if you want main domain ONLY
+```
+
+Get the leading social referral sites for the url:
+
+```
+>>> sources_client.social_referrals(url)
+{"SocialSources":
+ [
+  {"Source": "Facebook",
+   "Value": 0.54321},
+  {"Source": "Reddit",
+   "Value": 0.43210},
+  # etc...
+ ]
+ "StartDate": "12/2014",
+ "EndDate": "02/2015"
+}
+```
+
+Get the organic search keywords for the url:
+
+```
+>>> sources_client.organic_search_keywords(url, start_month, end_month, md, page)
+{"Data":
+ [
+  {"SearchTerm": "example",
+   "Visits": 0.4321,
+   "Change": 0.1057},
+  {"SearchTerm": "demo",
+   "Visits": 0.1234,
+   "Change": -0.0856},
+  # etc...
+ ]
+ "ResultsCount": 10,
+ "TotalCount": 12345,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/orgsearch?start=11-2014&end=12-2014&md=false&UserKey=my_api_key&page=2"
+}
+```
+
+Get the paid search keywords for the url:
+
+```
+>>> sources_client.paid_search_keywords(url, start_month, end_month, md, page)
+{"Data":
+ [
+  {"SearchTerm": "example",
+   "Visits": 0.0034,
+   "Change": -0.0812},
+  {"SearchTerm": "demo",
+   "Visits": 0.0026,
+   "Change": 0.0452},
+  # etc...
+ ]
+ "ResultsCount": 10,
+ "TotalCount": 164,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/paidsearch?start=11-2014&end=12-2014&md=false&UserKey=my_api_key&page=2"
+}
+```
+
+Get the leading destination sites for the url:
+
+```
+>>> sources_client.destinations(url)
+{"Sites":
+ [
+  "cooldemosite.com",
+  "otherexample.com",
+  "shrimp.com",
+  # etc...
+ ],
+ "StartDate": "12/2014",
+ "EndDate": "02/2015"
+}
+```
+
+Get the organic keyword competitors for the url:
+
+```
+>>> sources_client.organic_keyword_competitors(url, start_month, end_month, md, page)
+{"Data":
+ [
+  {"Domain": "versusexample.com",
+   "Score": 0.1176},
+  {"Domain": "anothercompetitor.com",
+   "Score": 0.0945},
+  # etc...
+ ]
+ "ResultsCount": 10,
+ "TotalCount": 1391,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/orgkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=my_api_key&page=2"
+}
+```
+
+Get the paid keyword competitors for the url:
+
+```
+>>> sources_client.paid_keyword_competitors(url, start_month, end_month, md, page)
+{"Data":
+ [
+  {"Domain": "wehateexample.com",
+   "Score": 0.0791},
+  {"Domain": "yeahthoseguysaretheworst.com",
+   "Score": 0.04611},
+  # etc...
+ ]
+ "ResultsCount": 10,
+ "TotalCount": 476,
+ "Next": "http://api.similarweb.com/Site/example.com/v1/paidkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=my_api_key&page=2"
+}
+```
