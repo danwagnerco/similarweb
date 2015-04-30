@@ -266,7 +266,7 @@ def test_traffic_client_traffic_response_from_bad_url():
 def test_traffic_client_traffic_response_from_bad_url_with_http():
     expected = {"Error": "Malformed or Unknown URL"}
     target_url = ("http://api.similarweb.com/Site/"
-                  "http:/example.com/v1/traffic?UserKey=test_key")
+                  "http://example.com/v1/traffic?UserKey=test_key")
     f = "{0}/fixtures/traffic_client_traffic_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
