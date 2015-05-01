@@ -8,16 +8,16 @@ Create a client object for the API you'd like to use:
 #### Ready to go
 * Traffic: `traffic_client = TrafficClient("your_api_key")`
 * Content: `content_client = ContentClient("your_api_key")`
+* Sources: `sources_client = SourcesClient("your_api_key")`
 
 #### In development
 * Mobile: `mobile_client = MobileClient("your_api_key")`
-* Sources: `sources_client = SourcesClient("your_api_key")`
 
 ## Traffic Client in Action
 
 Let's set up the traffic client object and some variables we'll be using throughout:
 
-```python
+```
 >>> from similarweb import TrafficClient
 >>> traffic_client = TraffiClient("my_api_key")
 >>> url = "example.com"     # <~ no "www." or "http://"
@@ -29,14 +29,14 @@ Let's set up the traffic client object and some variables we'll be using through
 
 Get the number of estimated visits for the requested domain with `.visits`:
 
-```python
+```
 >>> traffic_client.visits(url, gr, start_month, end_month, md)
 {"2014-11-01": 123456789, "2014-12-01": 123456788}
 ```
 
 Get the global rank, country rank, traffic geography, traffic reach and traffic sources distribution with `.traffic`:
 
-```python
+```
 >>> traffic_client.traffic(url)
 {
  "GlobalRank": 2,
@@ -70,21 +70,21 @@ Get the global rank, country rank, traffic geography, traffic reach and traffic 
 
 Get the average pageviews for the requested domains with `.page_views`:
 
-```python
+```
 >>> traffic_client.page_views(url, gr, start_month, end_month, md)
 {"2014-11-01": 14.1234, "2014-12-01": 14.1233}
 ```
 
 Get the average visit duration at the requested domain with `.visit_duration`:
 
-```python
+```
 >>> traffic_client.visit_duration(url, gr, start_month, end_month, md)
 {"2014-11-01": 987.654321, "2014-12-01": 987.654320}
 ```
 
 Get the average bounce rate for the requested domain with `.bounce_rate`:
 
-```python
+```
 >>> traffic_client.bounce_rate(url, gr, start_month, end_month, md)
 {"2014-11-01": 0.1234, "2014-12-01": 0.1233}
 ```
@@ -93,7 +93,7 @@ Get the average bounce rate for the requested domain with `.bounce_rate`:
 
 Let's set up the content client object and some variables we'll be using throughout:
 
-```python
+```
 >>> from similarweb import ContentClient
 >>> content_client = ContentClient("my_api_key")
 >>> url = "example.com"     # <~ no "www" or "http://"
@@ -101,7 +101,7 @@ Let's set up the content client object and some variables we'll be using through
 
 Get sites similar to the requested domain along with similarity scores:
 
-```python
+```
 >>> content_client.similar_sites(url)
 {"example2.com": 0.9988776655,
  "example3.com": 0.987654321,
@@ -111,7 +111,7 @@ Get sites similar to the requested domain along with similarity scores:
 
 Get sites and their affinity score frequently visited by users of the requested domain:
 
-```python
+```
 >>> content_client.also_visited(url)
 {"example2.com": 0.00123456,
  "example3.com": 0.00012345,
@@ -121,7 +121,7 @@ Get sites and their affinity score frequently visited by users of the requested 
 
 Get tags and their score for the requested domain:
 
-```python
+```
 >>> content_client.tags(url)
 {"shrimp": 0.987654321,
  "white wine": 0.987654320,
@@ -131,14 +131,14 @@ Get tags and their score for the requested domain:
 
 Get the category for the requested domain:
 
-```python
+```
 >>> content_client.category(url)
 {"Category": "Shrimp/White Wine"}
 ```
 
 Get the category and rank for the requested domain:
 
-```python
+```
 >>> content_client.category_rank(url)
 {"Category": "Shrimp/White Wine",
  "CategoryRank": 1}
@@ -267,3 +267,4 @@ Get the paid keyword competitors for the url:
  "Next": "http://api.similarweb.com/Site/example.com/v1/paidkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=my_api_key&page=2"
 }
 ```
+
