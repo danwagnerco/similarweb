@@ -1,7 +1,7 @@
 import json
 import httpretty
 import os
-from similarweb.similarweb import ContentClient
+from similarweb import ContentClient
 
 TD = os.path.dirname(os.path.realpath(__file__))
 

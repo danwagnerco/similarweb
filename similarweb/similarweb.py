@@ -3,6 +3,7 @@ import json
 import requests
 import similarweb.helpers as helpers
 
+
 class TrafficClient(object):
     def __init__(self, user_key):
         self.user_key = user_key
