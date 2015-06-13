@@ -5,12 +5,9 @@ Python wrapper for the [SimilarWeb API](https://developer.similarweb.com/doc).
 
 Create a client object for the API you'd like to use:
 
-#### Ready to go
 * Traffic: `traffic_client = TrafficClient("your_api_key")`
 * Content: `content_client = ContentClient("your_api_key")`
 * Sources: `sources_client = SourcesClient("your_api_key")`
-
-#### In development
 * Mobile: `mobile_client = MobileClient("your_api_key")`
 
 ## Traffic Client in Action
@@ -265,6 +262,81 @@ Get the paid keyword competitors for the url:
  "ResultsCount": 10,
  "TotalCount": 476,
  "Next": "http://api.similarweb.com/Site/example.com/v1/paidkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=my_api_key&page=2"
+}
+```
+
+## Mobile Client in Action
+
+Let's set up the mobile client object and some variables we'll be using throughout:
+
+```
+>>> from similarweb import MobileClient
+>>> mobile_client = MobileClient("my_api_key")
+>>> app_id = "com.examplestudios.example" # <~ or "123456789"-format for apple
+>>> store = "google"                      # <~ or "apple"
+>>> url = "example.com"                   # <~ no "www." or "http://"
+```
+
+Get the app details (a Google example):
+
+```
+>>> mobile_client.app_details(app_id, store)
+{
+  "Title": "Example App",
+  "Cover": "http://example.com/cover",
+  "Author": "Example Studios",
+  "Price": "Free",
+  "Main Category": "Communication",
+  "MainCategoryId": "communication",
+  "Rating": 4.22
+}
+```
+
+Get the app details (an Apple example):
+```
+>>> mobile_client.app_details("123456789", "apple")
+{
+  "Title": "Example App",
+  "Cover": "http://example.com/cover",
+  "Author": "Example Studios",
+  "Price": "Free",
+  "Main Category": "Communication",
+  "MainCategoryId": "communication",
+  "Rating": 4.09
+}
+```
+
+Get the Google Play Store app installs (as a range):
+
+```
+>>> mobile_client.google_app_installs(app_id)
+{
+  "InstallsMin": 100000,
+  "InstallsMax": 500000
+}
+```
+
+Get the apps related to a certain site (a Google example):
+
+```
+>>> mobile_client.site_related_apps("google.com", "google")
+{
+  "com.google.android.youtube": "YouTube",
+  "com.google.android.apps.maps": "Maps",
+  "com.google.android.gms": "Google Play Series",
+  # ... etc.
+}
+```
+
+Get the apps related to a certain site (an Apple example):
+
+```
+>>> mobile_client.site_related_apps("apple.com", "apple")
+{
+  "284417350": "Remote",
+  "364709193": "iBooks",
+  "376101648": "Find My iPhone",
+  # ... etc.
 }
 ```
 
