@@ -1,0 +1,16 @@
+{
+ "RelatedApps": [
+  {
+   "AppId": "com.google.android.youtube",
+   "Title": "YouTube"
+  },
+  {
+   "AppId": "com.google.android.apps.maps",
+   "Title": "Maps"
+  },
+  {
+   "AppId": "com.google.android.gms",
+   "Title": "Google Play services"
+  }
+ ]
+}

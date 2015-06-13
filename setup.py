@@ -1,9 +1,13 @@
 from setuptools import setup
 
+__version__ = None
+with open("similarweb/version.py") as f:
+  exec(f.read())
+
 setup(
   name = "similarweb",
   packages = ["similarweb"],
-  version = "0.2.1",
+  version = __version__,
   description = "Python client for the SimilarWeb API",
   author = "Dan Wagner",
   author_email = "danwagnerco@gmail.com",
