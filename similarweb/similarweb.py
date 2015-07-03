@@ -1,6 +1,3 @@
-import re
-import json
-import requests
 from . import helpers
 
 
@@ -13,43 +10,37 @@ class TrafficClient(object):
     def traffic(self, url):
         traffic_url = ("traffic?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url.format(url) + traffic_url
-        response = requests.get(self.full_url)
-
-        dictionary = json.loads(response.text)
-        keys = list(dictionary.keys())
-        values = list(dictionary.values())
+        response = helpers.get_http_response(self.full_url)
 
         # Happy path
-        if "GlobalRank" in keys:
-            top_country_shares = dictionary["TopCountryShares"]
-            codes = [str(d["CountryCode"]) for d in top_country_shares]
-            shares = [d["TrafficShare"] for d in top_country_shares]
-            top_country_shares_dictionary = dict(zip(codes, shares))
-            del dictionary["TopCountryShares"]
-            dictionary["TopCountryShares"] = top_country_shares_dictionary
+        if "GlobalRank" in response.keys():
+            top_country_shares = helpers.dictify(response["TopCountryShares"],
+                                                          "CountryCode",
+                                                          "TrafficShare",
+                                                          stringify_keys = True)
+            traffic_reach = helpers.dictify(response["TrafficReach"],
+                                                     "Date",
+                                                     "Value")
+            traffic_shares = helpers.dictify(response["TrafficShares"],
+                                                      "SourceType",
+                                                      "SourceValue")
 
-            traffic_reach = dictionary["TrafficReach"]
-            dates = [d["Date"] for d in traffic_reach]
-            values = [d["Value"] for d in traffic_reach]
-            traffic_reach_dictionary = dict(zip(dates, values))
-            del dictionary["TrafficReach"]
-            dictionary["TrafficReach"] = traffic_reach_dictionary
+            del response["TopCountryShares"]
+            response["TopCountryShares"] = top_country_shares
+            del response["TrafficReach"]
+            response["TrafficReach"] = traffic_reach
+            del response["TrafficShares"]
+            response["TrafficShares"] = traffic_shares
 
-            traffic_shares = dictionary["TrafficShares"]
-            sources = [d["SourceType"] for d in traffic_shares]
-            source_values = [d["SourceValue"] for d in traffic_shares]
-            traffic_shares_dictionary = dict(zip(sources, source_values))
-            del dictionary["TrafficShares"]
-            dictionary["TrafficShares"] = traffic_shares_dictionary
-
-            return dictionary
+            return response
 
         # Handle invalid API key
-        elif "Error" in keys:
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle bad url
-        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+        elif ("Message" in response.keys() and
+              "found" in [x for x in response.values()][0].lower().split()):
             return helpers.BAD_URL
 
         # Handle any other weirdness that is returned
@@ -85,33 +76,30 @@ class TrafficClient(object):
         return self._results_from_web_traffic_apis(self.full_url)
 
     def _results_from_web_traffic_apis(self, url):
-        response = requests.get(url)
-        dictionary = json.loads(response.text)
-        keys = list(dictionary.keys())
-        values = list(dictionary.values())
+        response = helpers.get_http_response(self.full_url)
 
         # Handle good response (happy path)
-        if "Values" in keys:
-            sub = dictionary["Values"]
-            dates = [x["Date"] for x in sub]
-            values = [x["Value"] for x in sub]
-            return dict(zip(dates, values))
+        if "Values" in response.keys():
+            return helpers.dictify(response["Values"], "Date", "Value")
 
         # Handle invalid API key
-        elif "Error" in keys:
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle bad url
-        elif "Message" in keys and "Data Not Found" in values:
+        elif ("Message" in response.keys() and
+              "Data Not Found" in response.values()):
             return helpers.BAD_URL
 
         # Handle out-of-order dates
-        elif "Message" in keys and "Date range is not valid" in values:
+        elif ("Message" in response.keys() and
+              "Date range is not valid" in response.values()):
             return helpers.BAD_DATE_ORDER
 
         # Handle bad inputs
-        elif "Message" in keys and "The request is invalid." in values:
-            return helpers.bad_inputs_to_traffic_or_sources_api(dictionary)
+        elif ("Message" in response.keys() and
+              "The request is invalid." in response.values()):
+            return helpers.bad_inputs_to_traffic_or_sources_api(response)
 
         # Handle any other weirdness that is returned
         else:
@@ -153,29 +141,23 @@ class ContentClient(object):
                                                 happy_key,
                                                 item_key,
                                                 item_value):
-        response = requests.get(url)
-
-        # Look out, the nastiest urls do not return JSON
-        try:
-            dictionary = json.loads(response.text)
-            keys = list(dictionary.keys())
-            values = list(dictionary.values())
-        except ValueError:
-            return helpers.BAD_URL
+        response = helpers.get_http_response(url)
 
         # Handle good response (happy path)
-        if str(happy_key) in keys:
-            sub_list = dictionary[str(happy_key)]
-            sub_keys = [x[item_key] for x in sub_list]
-            sub_values = [x[item_value] for x in sub_list]
-            return dict(zip(sub_keys, sub_values))
+        if str(happy_key) in response.keys():
+            return helpers.dictify(response[happy_key], item_key, item_value)
+
+        # The API response was not JSON and get_http_response caught ValueError
+        elif response == helpers.BAD_URL:
+            return response
 
         # Handle invalid API key
-        elif "Error" in keys:
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle bad url
-        elif "Message" in keys and "Data Not Found" in values:
+        elif ("Message" in response.keys() and
+              "Data Not Found" in response.values()):
             return helpers.BAD_URL
 
         # Handle any other weirdness that is returned
@@ -190,30 +172,26 @@ class ContentClient(object):
     def category_rank(self, url):
         category_rank_url = ("categoryrank?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url.format(url) + category_rank_url
-        response = requests.get(self.full_url)
         return self._results_from_category_content_apis(self.full_url)
 
     def _results_from_category_content_apis(self, url):
-        response = requests.get(url)
-
-        # Look out, the nastiest urls do not return JSON
-        try:
-            dictionary = json.loads(response.text)
-            keys = list(dictionary.keys())
-            values = list(dictionary.values())
-        except ValueError:
-            return helpers.BAD_URL
+        response = helpers.get_http_response(url)
 
         # Handle good response (happy path)
-        if "Category" in keys:
-            return dictionary
+        if "Category" in response.keys():
+            return response
+
+        # The API response was not JSON and get_http_response caught ValueError
+        elif response == helpers.BAD_URL:
+            return response
 
         # Handle invalid API key
-        elif "Error" in keys:
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle bad url
-        elif "Message" in keys and "Data Not Found" in values:
+        elif ("Message" in response.keys() and
+              "Data Not Found" in response.values()):
             return helpers.BAD_URL
 
         # Handle any other weirdness that is returned
@@ -263,30 +241,30 @@ class SourcesClient(object):
         return self._results_from_search_keywords_apis(self.full_url)
 
     def _results_from_search_keywords_apis(self, url):
-        response = requests.get(url)
-        dictionary = json.loads(response.text)
-        keys = list(dictionary.keys())
-        values = list(dictionary.values())
+        response = helpers.get_http_response(url)
 
         # Happy path
-        if "Data" in keys:
-            return dictionary
+        if "Data" in response.keys():
+            return response
 
         # Handle invalid API key
-        elif "Error" in keys:
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle bad url
-        elif "Message" in keys and "Data Not Found" in values:
+        elif ("Message" in response.keys() and
+              "Data Not Found" in response.values()):
             return helpers.BAD_URL
 
         # Handle out-of-order dates
-        elif "Message" in keys and "Date range is not valid" in values:
+        elif ("Message" in response.keys() and
+              "Date range is not valid" in response.values()):
             return helpers.BAD_DATE_ORDER
 
         # Handle bad inputs
-        elif "Message" in keys and "The request is invalid." in values:
-            return helpers.bad_inputs_to_traffic_or_sources_api(dictionary)
+        elif ("Message" in response.keys() and
+              "The request is invalid." in response.values()):
+            return helpers.bad_inputs_to_traffic_or_sources_api(response)
 
         # Handle any other weirdness that is returned
         else:
@@ -295,28 +273,24 @@ class SourcesClient(object):
     def social_referrals(self, url):
         social_referrals_url = ("SocialReferringSites?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url.format(url, "v1") + social_referrals_url
-        response = requests.get(self.full_url)
-
-        dictionary = json.loads(response.text)
-        keys = list(dictionary.keys())
-        values = list(dictionary.values())
+        response = helpers.get_http_response(self.full_url)
 
         # Happy path
-        if "SocialSources" in keys:
-            social_sources_list = dictionary["SocialSources"]
-            sites = [d["Source"] for d in social_sources_list]
-            scores = [d["Value"] for d in social_sources_list]
-            social_sources_dictionary = dict(zip(sites, scores))
-            del dictionary["SocialSources"]
-            dictionary["SocialSources"] = social_sources_dictionary
-            return dictionary
+        if "SocialSources" in response.keys():
+            social_sources = helpers.dictify(response["SocialSources"],
+                                             "Source",
+                                             "Value")
+            del response["SocialSources"]
+            response["SocialSources"] = social_sources
+            return response
 
         # Handle invalid API key
-        elif "Error" in keys:
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle bad url
-        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+        elif ("Message" in response.keys() and
+              "found" in [x for x in response.values()][0].lower().split()):
             return helpers.BAD_URL
 
         # Handle any other weirdness that is returned
@@ -326,26 +300,23 @@ class SourcesClient(object):
     def destinations(self, url):
         destinations_url = ("leadingdestinationsites?UserKey={0}").format(self.user_key)
         self.full_url = self.base_url.format(url, "v2") + destinations_url
-        response = requests.get(self.full_url)
-
-        # Look out, the nastiest urls do not return JSON
-        try:
-            dictionary = json.loads(response.text)
-            keys = list(dictionary.keys())
-            values = list(dictionary.values())
-        except ValueError:
-            return helpers.BAD_URL
+        response = helpers.get_http_response(self.full_url)
 
         # Happy path
-        if "Sites" in keys:
-            return dictionary
+        if "Sites" in response.keys():
+            return response
+
+        # The API response was not JSON and get_http_response caught ValueError
+        elif response == helpers.BAD_URL:
+            return response
 
         # Handle invalid API key
-        elif "Error" in keys:
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle bad url
-        elif "Message" in keys and re.search("found", values[0], re.IGNORECASE):
+        elif ("Message" in response.keys() and
+              "found" in [x for x in response.values()][0].lower().split()):
             return helpers.BAD_URL
 
         # Handle any other weirdness that is returned
@@ -362,22 +333,20 @@ class MobileClient(object):
     def app_details(self, app_id, app_store):
         if helpers.input_to_app_store_is_bad(str(app_store)):
             return helpers.BAD_APP_STORE
+
         app_store_num = helpers.app_store_id_to_number(app_store)
-
         temp_url = self.base_url.format(app_store_num, str(app_id))
-
         self.full_url = "{0}v1/GetAppDetails?UserKey={1}".format(temp_url,
                                                                   self.user_key)
 
-        response = requests.get(self.full_url)
-        dictionary = json.loads(response.text)
+        response = helpers.get_http_response(self.full_url)
 
         # Happy path (including no stats)
-        if "Title" in dictionary.keys():
-            return dictionary
+        if "Title" in response.keys():
+            return response
 
         # Handle invalid API key
-        elif "Error" in dictionary.keys():
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle any other weirdness that is returned
@@ -389,15 +358,14 @@ class MobileClient(object):
         self.full_url = "{0}v1/GetAppInstalls?UserKey={1}".format(temp_url,
                                                                   self.user_key)
 
-        response = requests.get(self.full_url)
-        dictionary = json.loads(response.text)
+        response = helpers.get_http_response(self.full_url)
 
         # Happy path (including no stats)
-        if "InstallsMin" in dictionary.keys():
-            return dictionary
+        if "InstallsMin" in response.keys():
+            return response
 
         # Handle invalid API key
-        elif "Error" in dictionary.keys():
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle any other weirdness that is returned
@@ -407,31 +375,24 @@ class MobileClient(object):
     def site_related_apps(self, app_id, app_store):
         if helpers.input_to_app_store_is_bad(str(app_store)):
             return helpers.BAD_APP_STORE
+
         app_store_num = helpers.app_store_id_to_number(app_store)
-
         temp_url = self.base_url.format(app_store_num, str(app_id))
-
         self.full_url = "{0}v1/GetRelatedSiteApps?UserKey={1}".format(temp_url,
                                                                   self.user_key)
 
-        response = requests.get(self.full_url)
-        dictionary = json.loads(response.text)
-        print(self.full_url)
-        print(dictionary)
+        response = helpers.get_http_response(self.full_url)
 
         # Happy path
-        if "RelatedApps" in dictionary.keys():
-            sub = dictionary["RelatedApps"]
-            app_ids = [x["AppId"] for x in sub]
-            titles = [x["Title"] for x in sub]
-            return dict(zip(app_ids, titles))
+        if "RelatedApps" in response.keys():
+            return helpers.dictify(response["RelatedApps"], "AppId", "Title")
 
         # Handle invalid API key
-        elif "Error" in dictionary.keys():
+        elif "Error" in response.keys():
             return helpers.BAD_API_KEY
 
         # Handle malformed URL
-        elif "Message" in dictionary.keys():
+        elif "Message" in response.keys():
             return helpers.BAD_URL
 
         # Handle any other weirdness
