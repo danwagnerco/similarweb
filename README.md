@@ -1,6 +1,14 @@
 # Similarweb
 Python wrapper for the [SimilarWeb API](https://developer.similarweb.com/doc).
 
+## Installation
+
+Available at [PyPi](https://pypi.python.org/pypi/similarweb), the recommended installation method is with `pip`:
+
+```
+$ pip install similarweb
+```
+
 ## Usage
 
 Create a client object for the API you'd like to use:
@@ -24,14 +32,14 @@ Let's set up the traffic client object and some variables we'll be using through
 >>> md = False              # or True if you want main domain ONLY
 ```
 
-Get the number of estimated visits for the requested domain with `.visits`:
+Get the number of estimated visits for the requested domain with `visits`:
 
 ```
 >>> traffic_client.visits(url, gr, start_month, end_month, md)
 {"2014-11-01": 123456789, "2014-12-01": 123456788}
 ```
 
-Get the global rank, country rank, traffic geography, traffic reach and traffic sources distribution with `.traffic`:
+Get the global rank, country rank, traffic geography, traffic reach and traffic sources distribution with `traffic`:
 
 ```
 >>> traffic_client.traffic(url)
@@ -65,21 +73,21 @@ Get the global rank, country rank, traffic geography, traffic reach and traffic 
 }
 ```
 
-Get the average pageviews for the requested domains with `.page_views`:
+Get the average pageviews for the requested domains with `page_views`:
 
 ```
 >>> traffic_client.page_views(url, gr, start_month, end_month, md)
 {"2014-11-01": 14.1234, "2014-12-01": 14.1233}
 ```
 
-Get the average visit duration at the requested domain with `.visit_duration`:
+Get the average visit duration at the requested domain with `visit_duration`:
 
 ```
 >>> traffic_client.visit_duration(url, gr, start_month, end_month, md)
 {"2014-11-01": 987.654321, "2014-12-01": 987.654320}
 ```
 
-Get the average bounce rate for the requested domain with `.bounce_rate`:
+Get the average bounce rate for the requested domain with `bounce_rate`:
 
 ```
 >>> traffic_client.bounce_rate(url, gr, start_month, end_month, md)
@@ -96,7 +104,7 @@ Let's set up the content client object and some variables we'll be using through
 >>> url = "example.com"     # <~ no "www" or "http://"
 ```
 
-Get sites similar to the requested domain along with similarity scores:
+Get sites similar to the requested domain and their respective similarity scores with `similar_sites`:
 
 ```
 >>> content_client.similar_sites(url)
@@ -106,7 +114,7 @@ Get sites similar to the requested domain along with similarity scores:
  "exampleN.com": 0.2109876543}
 ```
 
-Get sites and their affinity score frequently visited by users of the requested domain:
+Get sites and their affinity scores frequently visited by users of the requested domain with `also_visited`:
 
 ```
 >>> content_client.also_visited(url)
@@ -116,7 +124,7 @@ Get sites and their affinity score frequently visited by users of the requested 
  "exampleN.com": 0.00001234}
 ```
 
-Get tags and their score for the requested domain:
+Get tags and their scores for the requested domain with `tags`:
 
 ```
 >>> content_client.tags(url)
@@ -126,14 +134,14 @@ Get tags and their score for the requested domain:
  "dilly": 0.098765432}
 ```
 
-Get the category for the requested domain:
+Get the category for the requested domain with `category`:
 
 ```
 >>> content_client.category(url)
 {"Category": "Shrimp/White Wine"}
 ```
 
-Get the category and rank for the requested domain:
+Get the category and rank for the requested domain with `category_rank`:
 
 ```
 >>> content_client.category_rank(url)
@@ -156,7 +164,7 @@ Let's set up the sources client object and some variables we'll be using through
 >>> md = False              # or True if you want main domain ONLY
 ```
 
-Get the leading social referral sites for the url:
+Get the leading social referral sites for the url with `social_referrals`:
 
 ```
 >>> sources_client.social_referrals(url)
@@ -173,7 +181,7 @@ Get the leading social referral sites for the url:
 }
 ```
 
-Get the organic search keywords for the url:
+Get the organic search keywords for the url with `organic_search_keywords`:
 
 ```
 >>> sources_client.organic_search_keywords(url, start_month, end_month, md, page)
@@ -193,7 +201,7 @@ Get the organic search keywords for the url:
 }
 ```
 
-Get the paid search keywords for the url:
+Get the paid search keywords for the url with `paid_search_keywords`:
 
 ```
 >>> sources_client.paid_search_keywords(url, start_month, end_month, md, page)
@@ -213,7 +221,7 @@ Get the paid search keywords for the url:
 }
 ```
 
-Get the leading destination sites for the url:
+Get the leading destination sites for the url with `destinations`:
 
 ```
 >>> sources_client.destinations(url)
@@ -229,7 +237,7 @@ Get the leading destination sites for the url:
 }
 ```
 
-Get the organic keyword competitors for the url:
+Get the organic keyword competitors for the url with `organic_keyword_competitors`:
 
 ```
 >>> sources_client.organic_keyword_competitors(url, start_month, end_month, md, page)
@@ -247,7 +255,7 @@ Get the organic keyword competitors for the url:
 }
 ```
 
-Get the paid keyword competitors for the url:
+Get the paid keyword competitors for the url with `paid_keyword_competitors`:
 
 ```
 >>> sources_client.paid_keyword_competitors(url, start_month, end_month, md, page)
@@ -277,7 +285,7 @@ Let's set up the mobile client object and some variables we'll be using througho
 >>> url = "example.com"                   # <~ no "www." or "http://"
 ```
 
-Get the app details (a Google example):
+Get the app details (a Google example) with `app_details`:
 
 ```
 >>> mobile_client.app_details(app_id, store)
@@ -292,7 +300,7 @@ Get the app details (a Google example):
 }
 ```
 
-Get the app details (an Apple example):
+Get the app details with `app_details` for an Apple app:
 ```
 >>> mobile_client.app_details("123456789", "apple")
 {
@@ -306,7 +314,7 @@ Get the app details (an Apple example):
 }
 ```
 
-Get the Google Play Store app installs (as a range):
+Get the Google Play Store app installs (as a range) with `google_app_installs`:
 
 ```
 >>> mobile_client.google_app_installs(app_id)
@@ -316,7 +324,7 @@ Get the Google Play Store app installs (as a range):
 }
 ```
 
-Get the apps related to a certain site (a Google example):
+Get the apps related to a certain site (a Google example) with `site_related_apps`:
 
 ```
 >>> mobile_client.site_related_apps("google.com", "google")
@@ -328,7 +336,7 @@ Get the apps related to a certain site (a Google example):
 }
 ```
 
-Get the apps related to a certain site (an Apple example):
+Get the apps related to a certain site with `site_related_apps` for Apple:
 
 ```
 >>> mobile_client.site_related_apps("apple.com", "apple")
@@ -339,4 +347,3 @@ Get the apps related to a certain site (an Apple example):
   # ... etc.
 }
 ```
-
