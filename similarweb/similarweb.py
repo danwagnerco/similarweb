@@ -4,7 +4,7 @@ from . import helpers
 class TrafficClient(object):
     def __init__(self, user_key):
         self.user_key = user_key
-        self.base_url = "http://api.similarweb.com/Site/{0}/v1/"
+        self.base_url = "https://api.similarweb.com/Site/{0}/v1/"
         self.full_url = ""
 
     def traffic(self, url):
@@ -109,7 +109,7 @@ class TrafficClient(object):
 class ContentClient(object):
     def __init__(self, user_key):
         self.user_key = user_key
-        self.base_url = "http://api.similarweb.com/Site/{0}/v2/"
+        self.base_url = "https://api.similarweb.com/Site/{0}/v2/"
         self.full_url = ""
 
     def similar_sites(self, url):
@@ -202,7 +202,7 @@ class ContentClient(object):
 class SourcesClient(object):
     def __init__(self, user_key):
         self.user_key = user_key
-        self.base_url = "http://api.similarweb.com/Site/{0}/{1}/"
+        self.base_url = "https://api.similarweb.com/Site/{0}/{1}/"
         self.full_url = ""
 
     def organic_search_keywords(self, url, page, start, end, md = False):
@@ -327,7 +327,7 @@ class SourcesClient(object):
 class MobileClient(object):
     def __init__(self, user_key):
         self.user_key = user_key
-        self.base_url = "http://api.similarweb.com/Mobile/{0}/{1}/"
+        self.base_url = "https://api.similarweb.com/Mobile/{0}/{1}/"
         self.full_url = ""
 
     def app_details(self, app_id, app_store):
