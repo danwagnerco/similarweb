@@ -14,7 +14,7 @@ def test_sources_client_has_user_key():
 def test_sources_client_has_base_url():
     client = SourcesClient("test_key")
 
-    assert client.base_url == "http://api.similarweb.com/Site/{0}/{1}/"
+    assert client.base_url == "https://api.similarweb.com/Site/{0}/{1}/"
 
 
 def test_sources_client_has_empty_full_url():
@@ -25,7 +25,7 @@ def test_sources_client_has_empty_full_url():
 
 @httpretty.activate
 def test_sources_client_social_referrals_completes_full_url():
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/SocialReferringSites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_social_referrals_good_response.json".format(TD)
@@ -41,7 +41,7 @@ def test_sources_client_social_referrals_completes_full_url():
 @httpretty.activate
 def test_sources_client_social_referrals_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/SocialReferringSites?"
                   "UserKey=invalid_key")
     f = "{0}/fixtures/sources_client_social_referrals_invalid_api_key_response.json".format(TD)
@@ -57,7 +57,7 @@ def test_sources_client_social_referrals_response_from_invalid_api_key():
 @httpretty.activate
 def test_sources_client_social_referrals_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "bad_url/v1/SocialReferringSites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_social_referrals_url_malformed_response.json".format(TD)
@@ -73,15 +73,15 @@ def test_sources_client_social_referrals_response_from_malformed_url():
 @httpretty.activate
 def test_sources_client_social_referrals_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
-                  "http://example.com/v1/SocialReferringSites?"
+    target_url = ("https://api.similarweb.com/Site/"
+                  "https://example.com/v1/SocialReferringSites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_social_referrals_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = data_file.read().replace("\n", "")
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
-        result = client.social_referrals("http://example.com")
+        result = client.social_referrals("https://example.com")
 
         assert result == expected
 
@@ -89,7 +89,7 @@ def test_sources_client_social_referrals_response_from_malformed_url_incl_http()
 @httpretty.activate
 def test_sources_client_social_referrals_response_from_empty_response():
     expected = {"Error": "Unknown Error"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/SocialReferringSites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_social_referrals_empty_response.json".format(TD)
@@ -112,7 +112,7 @@ def test_sources_client_social_referrals_response_from_good_inputs():
                   "Weibo.com": 0.010782551614770926},
                 "StartDate": "12/2014",
                 "EndDate": "02/2015"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/SocialReferringSites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_social_referrals_good_response.json".format(TD)
@@ -127,7 +127,7 @@ def test_sources_client_social_referrals_response_from_good_inputs():
 
 @httpretty.activate
 def test_sources_client_organic_search_keywords_completes_full_url():
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_good_response.json".format(TD)
@@ -143,7 +143,7 @@ def test_sources_client_organic_search_keywords_completes_full_url():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=invalid_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_invalid_api_key_response.json".format(TD)
@@ -159,7 +159,7 @@ def test_sources_client_organic_search_keywords_response_from_invalid_api_key():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "bad_url/v1/orgsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_url_malformed_response.json".format(TD)
@@ -175,15 +175,15 @@ def test_sources_client_organic_search_keywords_response_from_malformed_url():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
-                  "http://example.com/v1/orgsearch?start=11-2014&"
+    target_url = ("https://api.similarweb.com/Site/"
+                  "https://example.com/v1/orgsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
-        result = client.organic_search_keywords("http://example.com", 1, "11-2014", "12-2014", False)
+        result = client.organic_search_keywords("https://example.com", 1, "11-2014", "12-2014", False)
 
         assert result == expected
 
@@ -191,7 +191,7 @@ def test_sources_client_organic_search_keywords_response_from_malformed_url_incl
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_from_bad_page():
     expected = {"Error": "The field Page is invalid."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=11-2014&"
                   "end=12-2014&md=False&page=0&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_page_bad_response.json".format(TD)
@@ -207,7 +207,7 @@ def test_sources_client_organic_search_keywords_response_from_bad_page():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_from_bad_start_date():
     expected = {"Error": "The value '14-2014' is not valid for Start."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=14-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_start_bad_response.json".format(TD)
@@ -223,7 +223,7 @@ def test_sources_client_organic_search_keywords_response_from_bad_start_date():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_from_bad_end_date():
     expected = {"Error": "The value '0-2014' is not valid for End."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=11-2014&"
                   "end=0-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_end_bad_response.json".format(TD)
@@ -239,7 +239,7 @@ def test_sources_client_organic_search_keywords_response_from_bad_end_date():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_out_of_order_dates():
     expected = {"Error": "Date range is not valid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=12-2014&"
                   "end=9-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_out_of_order_response.json".format(TD)
@@ -255,7 +255,7 @@ def test_sources_client_organic_search_keywords_response_out_of_order_dates():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_from_bad_main_domain():
     expected = {"Error": "The value 'other' is not valid for Md."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=12-2014&"
                   "end=9-2014&md=other&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_main_domain_bad_response.json".format(TD)
@@ -271,7 +271,7 @@ def test_sources_client_organic_search_keywords_response_from_bad_main_domain():
 @httpretty.activate
 def test_sources_client_organic_search_keywords_response_empty_response():
     expected = {"Error": "Unknown Error"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_empty_response.json".format(TD)
@@ -319,7 +319,7 @@ def test_sources_client_organic_search_keywords_response_from_good_inputs():
                 "ResultsCount": 10,
                 "TotalCount": 11975,
                 "Next": "http://api.similarweb.com/Site/example.com/v1/orgsearch?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_search_keywords_good_response.json".format(TD)
@@ -334,7 +334,7 @@ def test_sources_client_organic_search_keywords_response_from_good_inputs():
 
 @httpretty.activate
 def test_sources_client_paid_search_keywords_completes_full_url():
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_good_response.json".format(TD)
@@ -350,7 +350,7 @@ def test_sources_client_paid_search_keywords_completes_full_url():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=invalid_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_invalid_api_key_response.json".format(TD)
@@ -366,7 +366,7 @@ def test_sources_client_paid_search_keywords_response_from_invalid_api_key():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "bad_url/v1/paidsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_url_malformed_response.json".format(TD)
@@ -382,15 +382,15 @@ def test_sources_client_paid_search_keywords_response_from_malformed_url():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
-                  "http://example.com/v1/paidsearch?start=11-2014&"
+    target_url = ("https://api.similarweb.com/Site/"
+                  "https://example.com/v1/paidsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
-        result = client.paid_search_keywords("http://example.com", 1, "11-2014", "12-2014", False)
+        result = client.paid_search_keywords("https://example.com", 1, "11-2014", "12-2014", False)
 
         assert result == expected
 
@@ -398,7 +398,7 @@ def test_sources_client_paid_search_keywords_response_from_malformed_url_incl_ht
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_from_bad_page():
     expected = {"Error": "The field Page is invalid."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=11-2014&"
                   "end=12-2014&md=False&page=0&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_page_bad_response.json".format(TD)
@@ -414,7 +414,7 @@ def test_sources_client_paid_search_keywords_response_from_bad_page():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_from_bad_start_date():
     expected = {"Error": "The value '14-2014' is not valid for Start."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=14-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_start_bad_response.json".format(TD)
@@ -430,7 +430,7 @@ def test_sources_client_paid_search_keywords_response_from_bad_start_date():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_from_bad_end_date():
     expected = {"Error": "The value '0-2014' is not valid for End."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=11-2014&"
                   "end=0-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_end_bad_response.json".format(TD)
@@ -446,7 +446,7 @@ def test_sources_client_paid_search_keywords_response_from_bad_end_date():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_out_of_order_dates():
     expected = {"Error": "Date range is not valid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=12-2014&"
                   "end=9-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_out_of_order_response.json".format(TD)
@@ -462,7 +462,7 @@ def test_sources_client_paid_search_keywords_response_out_of_order_dates():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_from_bad_main_domain():
     expected = {"Error": "The value 'other' is not valid for Md."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=12-2014&"
                   "end=9-2014&md=other&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_main_domain_bad_response.json".format(TD)
@@ -478,7 +478,7 @@ def test_sources_client_paid_search_keywords_response_from_bad_main_domain():
 @httpretty.activate
 def test_sources_client_paid_search_keywords_response_empty_response():
     expected = {"Error": "Unknown Error"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_empty_response.json".format(TD)
@@ -526,7 +526,7 @@ def test_sources_client_paid_search_keywords_response_from_good_inputs():
                 "ResultsCount": 10,
                 "TotalCount": 243,
                 "Next": "http://api.similarweb.com/Site/example.com/v1/paidsearch?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidsearch?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_search_keywords_good_response.json".format(TD)
@@ -541,7 +541,7 @@ def test_sources_client_paid_search_keywords_response_from_good_inputs():
 
 @httpretty.activate
 def test_sources_client_destinations_completes_full_url():
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v2/leadingdestinationsites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_destinations_good_response.json".format(TD)
@@ -557,7 +557,7 @@ def test_sources_client_destinations_completes_full_url():
 @httpretty.activate
 def test_sources_client_destinations_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v2/leadingdestinationsites?"
                   "UserKey=invalid_key")
     f = "{0}/fixtures/sources_client_destinations_invalid_api_key_response.json".format(TD)
@@ -573,7 +573,7 @@ def test_sources_client_destinations_response_from_invalid_api_key():
 @httpretty.activate
 def test_sources_client_destinations_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "bad_url/v2/leadingdestinationsites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_destinations_url_malformed_response.json".format(TD)
@@ -590,15 +590,15 @@ def test_sources_client_destinations_response_from_malformed_url():
 @httpretty.activate
 def test_sources_client_destinations_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
-                  "http://example.com/v2/leadingdestinationsites?"
+    target_url = ("https://api.similarweb.com/Site/"
+                  "https://example.com/v2/leadingdestinationsites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_destinations_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = data_file.read().replace("\n", "")
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
-        result = client.destinations("http://example.com")
+        result = client.destinations("https://example.com")
 
         assert result == expected
 
@@ -606,7 +606,7 @@ def test_sources_client_destinations_response_from_malformed_url_incl_http():
 @httpretty.activate
 def test_sources_client_destinations_response_from_empty_response():
     expected = {"Error": "Unknown Error"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v2/leadingdestinationsites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_destinations_empty_response.json".format(TD)
@@ -633,7 +633,7 @@ def test_sources_client_destinations_response_from_good_inputs():
                           "spox.com"],
                 "StartDate": "12/2014",
                 "EndDate": "02/2015"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v2/leadingdestinationsites?"
                   "UserKey=test_key")
     f = "{0}/fixtures/sources_client_destinations_good_response.json".format(TD)
@@ -648,7 +648,7 @@ def test_sources_client_destinations_response_from_good_inputs():
 
 @httpretty.activate
 def test_sources_client_referrals_completes_full_url():
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=11-2014&"
                   "end=12-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_good_response.json".format(TD)
@@ -664,7 +664,7 @@ def test_sources_client_referrals_completes_full_url():
 @httpretty.activate
 def test_sources_client_referrals_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=11-2014&"
                   "end=12-2014&page=1&UserKey=invalid_key")
     f = "{0}/fixtures/sources_client_referrals_invalid_api_key_response.json".format(TD)
@@ -680,7 +680,7 @@ def test_sources_client_referrals_response_from_invalid_api_key():
 @httpretty.activate
 def test_sources_client_referrals_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "bad_url/v1/referrals?start=11-2014&"
                   "end=12-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_url_malformed_response.json".format(TD)
@@ -696,15 +696,15 @@ def test_sources_client_referrals_response_from_malformed_url():
 @httpretty.activate
 def test_sources_client_referrals_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
-                  "http://example.com/v1/referrals?start=11-2014&"
+    target_url = ("https://api.similarweb.com/Site/"
+                  "https://example.com/v1/referrals?start=11-2014&"
                   "end=12-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
-        result = client.referrals("http://example.com", 1, "11-2014", "12-2014")
+        result = client.referrals("https://example.com", 1, "11-2014", "12-2014")
 
         assert result == expected
 
@@ -712,7 +712,7 @@ def test_sources_client_referrals_response_from_malformed_url_incl_http():
 @httpretty.activate
 def test_sources_client_referrals_response_from_bad_page():
     expected = {"Error": "The field Page is invalid."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=11-2014&"
                   "end=12-2014&page=0&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_page_bad_response.json".format(TD)
@@ -728,7 +728,7 @@ def test_sources_client_referrals_response_from_bad_page():
 @httpretty.activate
 def test_sources_client_referrals_response_from_bad_start_date():
     expected = {"Error": "The value '14-2014' is not valid for Start."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=14-2014&"
                   "end=12-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_start_bad_response.json".format(TD)
@@ -744,7 +744,7 @@ def test_sources_client_referrals_response_from_bad_start_date():
 @httpretty.activate
 def test_sources_client_referrals_response_from_bad_end_date():
     expected = {"Error": "The value '0-2014' is not valid for End."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=11-2014&"
                   "end=0-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_end_bad_response.json".format(TD)
@@ -760,7 +760,7 @@ def test_sources_client_referrals_response_from_bad_end_date():
 @httpretty.activate
 def test_sources_client_referrals_response_out_of_order_dates():
     expected = {"Error": "Date range is not valid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=12-2014&"
                   "end=9-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_out_of_order_response.json".format(TD)
@@ -776,7 +776,7 @@ def test_sources_client_referrals_response_out_of_order_dates():
 @httpretty.activate
 def test_sources_client_referrals_response_empty_response():
     expected = {"Error": "Unknown Error"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=11-2014&"
                   "end=12-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_empty_response.json".format(TD)
@@ -825,7 +825,7 @@ def test_sources_client_referrals_response_from_good_inputs():
                 "ResultsCount": 10,
                 "TotalCount": 1540,
                 "Next": "http://api.similarweb.com/Site/example.com/v1/referrals?start=11-2014&end=12-2014&UserKey=test_key&page=2"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/referrals?start=11-2014&"
                   "end=12-2014&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_referrals_good_response.json".format(TD)
@@ -840,7 +840,7 @@ def test_sources_client_referrals_response_from_good_inputs():
 
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_completes_full_url():
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_good_response.json".format(TD)
@@ -856,7 +856,7 @@ def test_sources_client_organic_keyword_competitors_completes_full_url():
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=invalid_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_invalid_api_key_response.json".format(TD)
@@ -872,7 +872,7 @@ def test_sources_client_organic_keyword_competitors_response_from_invalid_api_ke
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "bad_url/v1/orgkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_url_malformed_response.json".format(TD)
@@ -888,15 +888,15 @@ def test_sources_client_organic_keyword_competitors_response_from_malformed_url(
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
-                  "http://example.com/v1/orgkwcompetitor?start=11-2014&"
+    target_url = ("https://api.similarweb.com/Site/"
+                  "https://example.com/v1/orgkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
-        result = client.organic_keyword_competitors("http://example.com", 1, "11-2014", "12-2014", False)
+        result = client.organic_keyword_competitors("https://example.com", 1, "11-2014", "12-2014", False)
 
         assert result == expected
 
@@ -904,7 +904,7 @@ def test_sources_client_organic_keyword_competitors_response_from_malformed_url_
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_from_bad_page():
     expected = {"Error": "The field Page is invalid."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=0&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_page_bad_response.json".format(TD)
@@ -920,7 +920,7 @@ def test_sources_client_organic_keyword_competitors_response_from_bad_page():
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_from_bad_start_date():
     expected = {"Error": "The value '14-2014' is not valid for Start."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=14-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_start_bad_response.json".format(TD)
@@ -936,7 +936,7 @@ def test_sources_client_organic_keyword_competitors_response_from_bad_start_date
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_from_bad_end_date():
     expected = {"Error": "The value '0-2014' is not valid for End."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=11-2014&"
                   "end=0-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_end_bad_response.json".format(TD)
@@ -952,7 +952,7 @@ def test_sources_client_organic_keyword_competitors_response_from_bad_end_date()
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_out_of_order_dates():
     expected = {"Error": "Date range is not valid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=12-2014&"
                   "end=9-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_out_of_order_response.json".format(TD)
@@ -968,7 +968,7 @@ def test_sources_client_organic_keyword_competitors_response_out_of_order_dates(
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_from_bad_main_domain():
     expected = {"Error": "The value 'other' is not valid for Md."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=12-2014&"
                   "end=9-2014&md=other&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_main_domain_bad_response.json".format(TD)
@@ -984,7 +984,7 @@ def test_sources_client_organic_keyword_competitors_response_from_bad_main_domai
 @httpretty.activate
 def test_sources_client_organic_keyword_competitors_response_empty_response():
     expected = {"Error": "Unknown Error"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_empty_response.json".format(TD)
@@ -1011,8 +1011,8 @@ def test_sources_client_organic_keyword_competitors_response_from_good_inputs():
                          "stubhub.com": 0.007999157326624741},
                 "ResultsCount": 10,
                 "TotalCount": 1510,
-                "Next": "http://api.similarweb.com/Site/example.com/v1/orgkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"}
-    target_url = ("http://api.similarweb.com/Site/"
+                "Next": "https://api.similarweb.com/Site/example.com/v1/orgkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"}
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/orgkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_organic_keyword_competitors_good_response.json".format(TD)
@@ -1028,7 +1028,7 @@ def test_sources_client_organic_keyword_competitors_response_from_good_inputs():
 
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_completes_full_url():
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_good_response.json".format(TD)
@@ -1044,7 +1044,7 @@ def test_sources_client_paid_keyword_competitors_completes_full_url():
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_from_invalid_api_key():
     expected = {"Error": "user_key_invalid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=invalid_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_invalid_api_key_response.json".format(TD)
@@ -1060,7 +1060,7 @@ def test_sources_client_paid_keyword_competitors_response_from_invalid_api_key()
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_from_malformed_url():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "bad_url/v1/paidkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_url_malformed_response.json".format(TD)
@@ -1076,15 +1076,15 @@ def test_sources_client_paid_keyword_competitors_response_from_malformed_url():
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_from_malformed_url_incl_http():
     expected = {"Error": "Malformed or Unknown URL"}
-    target_url = ("http://api.similarweb.com/Site/"
-                  "http://example.com/v1/paidkwcompetitor?start=11-2014&"
+    target_url = ("https://api.similarweb.com/Site/"
+                  "https://example.com/v1/paidkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_url_with_http_response.json".format(TD)
     with open(f) as data_file:
         stringified = json.dumps(json.load(data_file))
         httpretty.register_uri(httpretty.GET, target_url, body=stringified)
         client = SourcesClient("test_key")
-        result = client.paid_keyword_competitors("http://example.com", 1, "11-2014", "12-2014", False)
+        result = client.paid_keyword_competitors("https://example.com", 1, "11-2014", "12-2014", False)
 
         assert result == expected
 
@@ -1092,7 +1092,7 @@ def test_sources_client_paid_keyword_competitors_response_from_malformed_url_inc
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_from_bad_page():
     expected = {"Error": "The field Page is invalid."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=0&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_page_bad_response.json".format(TD)
@@ -1108,7 +1108,7 @@ def test_sources_client_paid_keyword_competitors_response_from_bad_page():
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_from_bad_start_date():
     expected = {"Error": "The value '14-2014' is not valid for Start."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=14-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_start_bad_response.json".format(TD)
@@ -1124,7 +1124,7 @@ def test_sources_client_paid_keyword_competitors_response_from_bad_start_date():
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_from_bad_end_date():
     expected = {"Error": "The value '0-2014' is not valid for End."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=11-2014&"
                   "end=0-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_end_bad_response.json".format(TD)
@@ -1140,7 +1140,7 @@ def test_sources_client_paid_keyword_competitors_response_from_bad_end_date():
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_out_of_order_dates():
     expected = {"Error": "Date range is not valid"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=12-2014&"
                   "end=9-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_out_of_order_response.json".format(TD)
@@ -1156,7 +1156,7 @@ def test_sources_client_paid_keyword_competitors_response_out_of_order_dates():
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_from_bad_main_domain():
     expected = {"Error": "The value 'other' is not valid for Md."}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=12-2014&"
                   "end=9-2014&md=other&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_main_domain_bad_response.json".format(TD)
@@ -1172,7 +1172,7 @@ def test_sources_client_paid_keyword_competitors_response_from_bad_main_domain()
 @httpretty.activate
 def test_sources_client_paid_keyword_competitors_response_empty_response():
     expected = {"Error": "Unknown Error"}
-    target_url = ("http://api.similarweb.com/Site/"
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_empty_response.json".format(TD)
@@ -1199,8 +1199,8 @@ def test_sources_client_paid_keyword_competitors_response_from_good_inputs():
                          "vividseats.com": 0.016849267072753825},
                 "ResultsCount": 10,
                 "TotalCount": 489,
-                "Next": "http://api.similarweb.com/Site/example.com/v1/paidkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"}
-    target_url = ("http://api.similarweb.com/Site/"
+                "Next": "https://api.similarweb.com/Site/example.com/v1/paidkwcompetitor?start=11-2014&end=12-2014&md=false&UserKey=test_key&page=2"}
+    target_url = ("https://api.similarweb.com/Site/"
                   "example.com/v1/paidkwcompetitor?start=11-2014&"
                   "end=12-2014&md=False&page=1&UserKey=test_key")
     f = "{0}/fixtures/sources_client_paid_keyword_competitors_good_response.json".format(TD)
