@@ -24,7 +24,7 @@ Let's set up the traffic client object and some variables we'll be using through
 
 ```
 >>> from similarweb import TrafficClient
->>> traffic_client = TraffiClient("my_api_key")
+>>> traffic_client = TrafficClient("my_api_key")
 >>> url = "example.com"     # <~ no "www." or "http://"
 >>> gr = "monthly"          # <~ or "weekly" or "daily"
 >>> start_month = "11-2014" # <~ M-YYYY
